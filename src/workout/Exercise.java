@@ -1,4 +1,4 @@
-package Workout;
+package workout;
 
 public class Exercise {
     private String name;
@@ -6,13 +6,18 @@ public class Exercise {
     private int weight;
     private int sets;
 
-    public Exercise(String name, int reps, int weight, int sets) {
+    public Exercise(String name, int weight, int sets, int reps) {
         this.name = name;
         this.reps = reps;
         this.weight = weight;
         this.sets = sets;
 
 
+    }
+
+    public String toString() {
+
+        return this.name + "(" + this.weight + " lbs)" + "," + this.sets + " sets " + this.reps + " reps";
     }
 
     public String getName() {
