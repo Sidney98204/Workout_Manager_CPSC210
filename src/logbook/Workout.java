@@ -1,11 +1,13 @@
-package workout;
+package logbook;
 
 // a list of exercises
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Workout {
     private String name;
+    private String date;
     private ArrayList<Exercise> workout;
 
     // REQUIRES:
@@ -18,7 +20,7 @@ public class Workout {
     }
     // REQUIRES:
     // MODIFIES:
-    // EFFECTS: searches through workout for an exercise with a name name and returns it, returns null if not found
+    // EFFECTS: searches through logbook for an exercise with a name name and returns it, returns null if not found
     public Exercise searchExercise(String name) {
         Exercise e = null;
         for (Exercise exercise: workout) {
@@ -38,8 +40,17 @@ public class Workout {
     }
 
     // REQUIRES:
+    // MODIFIES: this
+    // EFFECTS: removes exercise if found in this, does nothing otherwise
+    public void removeExercise(Exercise e) {
+        if (workout.contains(e)) {
+            workout.remove(e);
+        }
+    }
+
+    // REQUIRES:
     // MODIFIES:
-    // EFFECTS: returns the number of exercises in workout
+    // EFFECTS: returns the number of exercises in logbook
     public int getSize() {
         return workout.size();
         // haven't written tests for this method!!!
@@ -65,5 +76,40 @@ public class Workout {
         for (Exercise e : workout) {
             System.out.println(e);
         }
+
+        // tests for print methods...?
     }
+
+    //REQUIRES:
+    //MODIFIES:
+    //EFFECTS: returns the string representation of a workout
+    public String toString() {
+        String listOfExercises = "";
+        for (Exercise e: workout) {
+            listOfExercises = listOfExercises + e + "\n";
+        }
+
+        return listOfExercises;
+    }
+
+    public String returnString() {
+        String listOfExercises = "";
+        for (Exercise e: workout) {
+            listOfExercises += e.returnStringForSaving() + "\n";
+        }
+
+        return listOfExercises;
+    }
+
+    // EFFECTS: returns a list of string representations of each exercise
+    public List<String> returnStringList() {
+        List<String> list = new ArrayList<>();
+        for (Exercise e: workout) {
+            list.add(e.returnStringForSaving());
+        }
+
+        return list;
+    }
+
+
 }

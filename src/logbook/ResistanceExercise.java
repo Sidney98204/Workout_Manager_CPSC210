@@ -1,17 +1,17 @@
-package workout;
+package logbook;
 
 // abstraction of a single exercise (e.g squats, deadlifts, etc.)
 
-public class Exercise {
+public class ResistanceExercise implements Exercise {
     private String name;
     private int reps;
     private int weight;
     private int sets;
 
-    // REQUIRES:
+    // REQUIRES: name does not contain spaces
     // MODIFIES: this
     // EFFECTS: creates new exercise object w/ given parameters
-    public Exercise(String name, int weight, int sets, int reps) {
+    public ResistanceExercise(String name, int weight, int sets, int reps) {
         this.name = name;
         this.reps = reps;
         this.weight = weight;
@@ -22,10 +22,17 @@ public class Exercise {
 
     // REQUIRES:
     // MODIFIES:
-    // EFFECTS: converts String representation of Exercise objects to something intelligible
+    // EFFECTS: converts String representation of ResistanceExercise objects to something intelligible
     public String toString() {
 
         return this.name + "(" + this.weight + " lbs)" + ", " + this.sets + " sets " + this.reps + " reps";
+    }
+
+    // REQUIRES:
+    // MODIFIES:
+    // EFFECTS: returns intelligible string representation of this
+    public String returnStringForSaving() {
+        return "Resistance: " + this.name + " " + this.weight + " " + this.sets + " " + this.reps;
     }
 
     // REQUIRES:

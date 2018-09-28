@@ -1,11 +1,18 @@
 package ui;
 
-import workout.Exercise;
-import workout.Workout;
+import com.sun.org.apache.xpath.internal.SourceTree;
+import logbook.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.List;
 
 public class UserInterface implements Runnable {
     private JFrame frame;
@@ -18,23 +25,38 @@ public class UserInterface implements Runnable {
         workout = new Workout();
     }
 
-    public void start() {
+    public void start() throws IOException {
         printIntro();
+        load();
         String input;
+
         while (true) {
             System.out.println("What would you like to do?");
             printFunctionalities();
             input = reader.nextLine();
             if (input.equals("1")) {
-                System.out.println("Name:");
-                String name = reader.nextLine();
-                System.out.println("Weight:");
-                int weight = Integer.parseInt(reader.nextLine());
-                System.out.println("Sets:");
-                int sets = Integer.parseInt(reader.nextLine());
-                System.out.println("Reps:");
-                int reps = Integer.parseInt(reader.nextLine());
-                workout.addExercise(new Exercise(name, weight, sets, reps));
+                System.out.println("Specify type:");
+                input = reader.nextLine();
+                if (input.equals("resistance")) {
+                    System.out.println("Name:");
+                    String name = reader.nextLine();
+                    System.out.println("Weight:");
+                    int weight = Integer.parseInt(reader.nextLine());
+                    System.out.println("Sets:");
+                    int sets = Integer.parseInt(reader.nextLine());
+                    System.out.println("Reps:");
+                    int reps = Integer.parseInt(reader.nextLine());
+                    workout.addExercise(new ResistanceExercise(name, weight, sets, reps));
+                } else if (input.equals("cardio")) {
+                    System.out.println("Name: ");
+                    String name = reader.nextLine();
+                    System.out.println("Duration:");
+                    int duration = Integer.parseInt(reader.nextLine());
+                    System.out.println("Intensity:");
+                    String intensity = reader.nextLine();
+                    workout.addExercise(new CardioExercise(name, duration, intensity));
+                }
+
 
             } else if (input.equals("2")) {
                 System.out.println("Enter name of exercise:");
@@ -44,6 +66,17 @@ public class UserInterface implements Runnable {
             } else if (input.equals("3")) {
                 workout.printWorkout();
             } else if (input.equals("quit")) {
+                System.out.println("Would you like to save your changes?");
+                input = reader.nextLine();
+                if (input.equals("yes")) {
+                    try {
+                        save();
+                    } catch(Exception e) {
+
+                    }
+                } else {
+
+                }
                 break;
 
             } else {
@@ -79,5 +112,38 @@ public class UserInterface implements Runnable {
 
     public void createComponents(Container container) {
 
+    }
+
+    public void save() throws IOException {
+
+        List<String> lines = workout.returnStringList();
+        PrintWriter writer = new PrintWriter("savefile.text", "UTF-8");
+        for (String line: lines) {
+            writer.println(line);
+        }
+        writer.close();
+
+
+    }
+
+    public void load() throws IOException {
+        List<String> lines = Files.readAllLines(Paths.get("savefile.text"));
+        for (String line: lines) {
+            ArrayList<String> partsOfLine = splitOnSpace(line);
+            if (partsOfLine.get(0).equals("Cardio:")) {
+                workout.addExercise(new CardioExercise(partsOfLine.get(1),
+                        Integer.parseInt(partsOfLine.get(2)), partsOfLine.get(3)));
+            } else if (partsOfLine.get(0).equals("Resistance:")) {
+                workout.addExercise(new ResistanceExercise(partsOfLine.get(1),
+                        Integer.parseInt(partsOfLine.get(2)),
+                        Integer.parseInt(partsOfLine.get(3)),
+                        Integer.parseInt(partsOfLine.get(4))));
+            }
+
+        }
+    }
+    public static ArrayList<String> splitOnSpace(String line) {
+        String[] splits = line.split(" ");
+        return new ArrayList<>(Arrays.asList(splits));
     }
 }

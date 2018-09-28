@@ -1,23 +1,23 @@
 package Test;
 
+import logbook.ResistanceExercise;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import workout.Exercise;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ExerciseTests {
-    private Exercise e;
+public class ResistanceExerciseTests {
+    private ResistanceExercise e;
 
     @BeforeEach
     public void setup() {
-        e = new Exercise("Squat", 225, 3, 12);
+        e = new ResistanceExercise("Squat", 225, 3, 12);
     }
 
     public void testExercise() {
-        Exercise exercise = new Exercise("Deadlift", 305, 4, 8);
+        ResistanceExercise exercise = new ResistanceExercise("Deadlift", 305, 4, 8);
 
         assertEquals(exercise.getName(), "Deadlift");
         assertEquals(exercise.getWeight(), 305);
@@ -85,4 +85,20 @@ public class ExerciseTests {
 
         assertTrue(e.getReps() == newReps);
     }
+
+    @Test
+    public void testtoString() {
+        String exercise = "Squat (225 lbs), 3 sets 12 reps";
+        String toStringOfe = e.toString();
+
+        assertEquals(exercise, toStringOfe);
+    }
+
+    @Test
+    public void testReturnStringForSaving() {
+        String desiredOutput = "Resistance: Squat 225 3 12";
+
+        assertEquals(e.returnStringForSaving(), desiredOutput);
+    }
+
 }
