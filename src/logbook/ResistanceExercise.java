@@ -1,6 +1,5 @@
 package logbook;
 
-// abstraction of a single exercise (e.g squats, deadlifts, etc.)
 
 public class ResistanceExercise implements Exercise {
     private String name;
@@ -8,7 +7,7 @@ public class ResistanceExercise implements Exercise {
     private int weight;
     private int sets;
 
-    // REQUIRES: name does not contain spaces
+    // REQUIRES: NAME DOES NOT CONTAIN SPACES!!! Otherwise it will be loaded improperly
     // MODIFIES: this
     // EFFECTS: creates new exercise object w/ given parameters
     public ResistanceExercise(String name, int weight, int sets, int reps) {

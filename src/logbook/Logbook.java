@@ -27,8 +27,13 @@ public class Logbook implements Loadable, Saveable {
         return logbook.size();
     }
 
+    // EFFECTS: returns true if given workout is inside logbook, false otherwise
+    public boolean isInsideOf(Workout workout) {
+        return logbook.contains(workout);
+    }
+
     // MODIFIES: this
-    // EFFECTS: adds workout to logbook
+    // EFFECTS: adds workout to the end of the list of logbook
     public void addWorkout(Workout workout) {
         logbook.add(workout);
     }
@@ -63,6 +68,8 @@ public class Logbook implements Loadable, Saveable {
         return list;
     }
 
+
+    // EFFECTS: loads previously saved info into the program
     public void load() throws IOException {
         String workoutIdentifier = "workout";
         String cardioIdentifier = "Cardio:";
@@ -80,10 +87,10 @@ public class Logbook implements Loadable, Saveable {
                 for (int i = 0; i < numberOfExercises; i++) {
                     String exerciseLine = r.nextLine();
                     ArrayList<String> partsOfLineExercise = splitOnSpace(exerciseLine);
-                    if (partsOfLineExercise.get(0).equals("Cardio:")) {
+                    if (partsOfLineExercise.get(0).equals(cardioIdentifier)) {
                         workout.addExercise(new CardioExercise(partsOfLineExercise.get(1),
                                 Integer.parseInt(partsOfLineExercise.get(2)), partsOfLineExercise.get(3)));
-                    } else if (partsOfLineExercise.get(0).equals("Resistance:")) {
+                    } else if (partsOfLineExercise.get(0).equals(resistanceIdentifier)) {
                         workout.addExercise(new ResistanceExercise(partsOfLineExercise.get(1),
                                 Integer.parseInt(partsOfLineExercise.get(2)),
                                 Integer.parseInt(partsOfLineExercise.get(3)),
@@ -132,6 +139,7 @@ public class Logbook implements Loadable, Saveable {
 
     }
 
+    // EFFECTS: saves inputted information into a file
     public void save() throws IOException {
 
         List<String> lines = this.returnStringList();
@@ -143,6 +151,8 @@ public class Logbook implements Loadable, Saveable {
 
 
     }
+
+    // EFFECTS: splits up given string by its spaces
     public static ArrayList<String> splitOnSpace(String line) {
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));

@@ -18,13 +18,13 @@ import java.util.List;
 public class UserInterface implements Runnable {
     private JFrame frame;
     private Scanner reader;
-    private Workout workout;
+
     private Logbook logbook;
 
 
     public UserInterface() {
         reader = new Scanner(System.in);
-        workout = new Workout();    // gonna remove this when we figure out how to save
+
         logbook = new Logbook();
     }
 
