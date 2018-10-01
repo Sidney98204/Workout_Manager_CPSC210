@@ -5,6 +5,7 @@ import logbook.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -18,59 +19,114 @@ public class UserInterface implements Runnable {
     private JFrame frame;
     private Scanner reader;
     private Workout workout;
+    private Logbook logbook;
 
 
     public UserInterface() {
         reader = new Scanner(System.in);
-        workout = new Workout();
+        workout = new Workout();    // gonna remove this when we figure out how to save
+        logbook = new Logbook();
     }
 
     public void start() throws IOException {
         printIntro();
-        load();
+        logbook.load();
         String input;
 
         while (true) {
             System.out.println("What would you like to do?");
-            printFunctionalities();
+            printstartFunctionalities();
             input = reader.nextLine();
             if (input.equals("1")) {
-                System.out.println("Specify type:");
-                input = reader.nextLine();
-                if (input.equals("resistance")) {
-                    System.out.println("Name:");
-                    String name = reader.nextLine();
-                    System.out.println("Weight:");
-                    int weight = Integer.parseInt(reader.nextLine());
-                    System.out.println("Sets:");
-                    int sets = Integer.parseInt(reader.nextLine());
-                    System.out.println("Reps:");
-                    int reps = Integer.parseInt(reader.nextLine());
-                    workout.addExercise(new ResistanceExercise(name, weight, sets, reps));
-                } else if (input.equals("cardio")) {
-                    System.out.println("Name: ");
-                    String name = reader.nextLine();
-                    System.out.println("Duration:");
-                    int duration = Integer.parseInt(reader.nextLine());
-                    System.out.println("Intensity:");
-                    String intensity = reader.nextLine();
-                    workout.addExercise(new CardioExercise(name, duration, intensity));
+                System.out.println("Name: ");
+                String workoutName = reader.nextLine();
+                System.out.println("Date: (DD/MM/YYYY)");
+                String workoutDate = reader.nextLine();
+                Workout workout = new Workout(workoutName, workoutDate);            // name and date!!!
+
+                while (true) {
+                    printWorkoutFunctionalities();
+                    input = reader.nextLine();
+                    if (input.equals("1")) {                         // hey this is kinda dangerous
+                        System.out.println("Specify type:");
+                        input = reader.nextLine();
+                        if (input.equals("r")) {
+                            System.out.println("Name:");
+                            String name = reader.nextLine();
+                            System.out.println("Weight:");
+                            int weight = Integer.parseInt(reader.nextLine());
+                            System.out.println("Sets:");
+                            int sets = Integer.parseInt(reader.nextLine());
+                            System.out.println("Reps:");
+                            int reps = Integer.parseInt(reader.nextLine());
+                            workout.addExercise(new ResistanceExercise(name, weight, sets, reps));
+                        } else if (input.equals("c")) {
+                            System.out.println("Name: ");
+                            String name = reader.nextLine();
+                            System.out.println("Duration:");
+                            int duration = Integer.parseInt(reader.nextLine());
+                            System.out.println("Intensity:");
+                            String intensity = reader.nextLine();
+                            workout.addExercise(new CardioExercise(name, duration, intensity));
+                        }
+
+                    } else if (input.equals("2")) {
+                        System.out.println("Enter name of exercise: ");
+                        String name = reader.nextLine();
+                        Exercise exercise = workout.searchExercise(name);
+                        System.out.println(exercise);
+
+                    } else if (input.equals("3")) {
+                        System.out.println("Enter name of exercise: ");
+                        String name = reader.nextLine();
+                        Exercise exercise = workout.searchExercise(name);
+                        workout.removeExercise(exercise);
+
+                    } else if (input.equals("4")) {
+                        workout.printWorkout();
+
+                    } else if (input.equals("x")) {
+
+                        logbook.addWorkout(workout);         // NOTE: you should be adding workouts in
+                        break;                                // chronological order
+                    }
                 }
 
 
+
+
             } else if (input.equals("2")) {
-                System.out.println("Enter name of exercise:");
-                String name = reader.nextLine();
-                Exercise exercise = workout.searchExercise(name);
-                System.out.println(exercise);
-            } else if (input.equals("3")) {
+                System.out.println("Enter name of workout: ");
+                String workoutName = reader.nextLine();
+                Workout workout = logbook.searchWorkout(workoutName);
+                logbook.removeWorkout(workout);
+            }
+            else if (input.equals("3")) {
+                System.out.println("Enter name of workout: ");
+                String workoutName = reader.nextLine();
+                Workout workout = logbook.searchWorkout(workoutName);
                 workout.printWorkout();
-            } else if (input.equals("quit")) {
+
+
+            } else if (input.equals("4")) {
+                System.out.println("Enter name of exercise:");
+                String exerciseName = reader.nextLine();
+                Exercise exercise = null;
+                for (int i = logbook.getSize() -1; i >= 0; i--) {
+                    Workout workout = logbook.getLogbook().get(i);
+                    exercise = workout.searchExercise(exerciseName);
+                    if (exercise != null) {
+                        break;
+                    }
+                }
+                System.out.println(exercise);
+
+            } else if (input.equals("x")) {
                 System.out.println("Would you like to save your changes?");
                 input = reader.nextLine();
                 if (input.equals("yes")) {
                     try {
-                        save();
+                        logbook.save();
                     } catch(Exception e) {
 
                     }
@@ -94,10 +150,25 @@ public class UserInterface implements Runnable {
 
     }
 
-    public void printFunctionalities() {
-        System.out.println("[1] Add Exercise");
-        System.out.println("[2] Search for Exercise");
-        System.out.println("[3] Print All Exercises");
+    public void printstartFunctionalities() {
+
+        System.out.println("[1] Create new workout");
+        System.out.println("[2] Remove workout");
+        System.out.println("[3] Search for workout");
+        System.out.println("[4] Search for exercise");
+        System.out.println("[x] Quit");
+
+
+
+
+    }
+
+    public void printWorkoutFunctionalities() {
+        System.out.println("[1] Add exercise");
+        System.out.println("[2] Search for exercise");
+        System.out.println("[3] Remove exercise");
+        System.out.println("[4] Print workout");
+        System.out.println("[x] Done");
     }
 
     public void run() {
@@ -114,36 +185,8 @@ public class UserInterface implements Runnable {
 
     }
 
-    public void save() throws IOException {
-
-        List<String> lines = workout.returnStringList();
-        PrintWriter writer = new PrintWriter("savefile.text", "UTF-8");
-        for (String line: lines) {
-            writer.println(line);
-        }
-        writer.close();
 
 
-    }
 
-    public void load() throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get("savefile.text"));
-        for (String line: lines) {
-            ArrayList<String> partsOfLine = splitOnSpace(line);
-            if (partsOfLine.get(0).equals("Cardio:")) {
-                workout.addExercise(new CardioExercise(partsOfLine.get(1),
-                        Integer.parseInt(partsOfLine.get(2)), partsOfLine.get(3)));
-            } else if (partsOfLine.get(0).equals("Resistance:")) {
-                workout.addExercise(new ResistanceExercise(partsOfLine.get(1),
-                        Integer.parseInt(partsOfLine.get(2)),
-                        Integer.parseInt(partsOfLine.get(3)),
-                        Integer.parseInt(partsOfLine.get(4))));
-            }
 
-        }
-    }
-    public static ArrayList<String> splitOnSpace(String line) {
-        String[] splits = line.split(" ");
-        return new ArrayList<>(Arrays.asList(splits));
-    }
 }

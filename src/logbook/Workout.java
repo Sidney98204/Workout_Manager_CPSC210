@@ -14,16 +14,45 @@ public class Workout {
     // MODIFIES: this
     // EFFECTS: creates new Workout object with empty list
     public Workout() {
+        //this.name = name;
+        //this.date = date;
 
         workout = new ArrayList<>();
 
     }
+
+    public Workout(String name, String date) {
+        this.name = name;
+        this.date = date;
+        workout = new ArrayList<>();
+    }
+
+    // EFFECTS: sets name of workout
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    // EFFECTS: returns name
+    public String getName() {
+        return this.name;
+    }
+
+    // EFFECTS: returns date
+    public String getDate() {
+        return this.date;
+
+    }
     // REQUIRES:
     // MODIFIES:
-    // EFFECTS: searches through logbook for an exercise with a name name and returns it, returns null if not found
+    // EFFECTS: searches through workout for an exercise with a name name and returns it, returns null if not found
+    // returns most recently added if there are duplicates
     public Exercise searchExercise(String name) {
         Exercise e = null;
-        for (Exercise exercise: workout) {
+        for (Exercise exercise: workout) {     // loops for every exercise, so it automatically gets last one if duplicates
             if (exercise.getName().equals(name)) {
                 e = exercise;
             }
@@ -46,11 +75,13 @@ public class Workout {
         if (workout.contains(e)) {
             workout.remove(e);
         }
+        // HEY, note that we use searchExercise to find the exercise, so the exercise might
+        // not correspond to the right one in the list if there are duplicates
     }
 
     // REQUIRES:
     // MODIFIES:
-    // EFFECTS: returns the number of exercises in logbook
+    // EFFECTS: returns the number of exercises in workout
     public int getSize() {
         return workout.size();
         // haven't written tests for this method!!!
@@ -61,7 +92,7 @@ public class Workout {
     // EFFECTS: checks if size of list fits index, if so, returns exercise at given index, otherwise returns null
     public Exercise getIndexExercise(int index) {
         Exercise e = null;
-        if (index <= getSize() -1) {
+        if (index <= getSize() -1 && index >= 0) {
             e = workout.get(index);
         }
          return e;
@@ -92,18 +123,30 @@ public class Workout {
         return listOfExercises;
     }
 
+    // EFFECTS: return string containing workout information
     public String returnString() {
-        String listOfExercises = "";
-        for (Exercise e: workout) {
-            listOfExercises += e.returnStringForSaving() + "\n";
+        String workoutIdentifier = "workout";
+        String workoutInfo = workoutIdentifier + " " + this.getSize() + " " + this.name + " " + this.date + "\n";
+
+        for (int i = 0; i < workout.size(); i++) {
+            Exercise e = workout.get(i);
+            if (i == workout.size()-1) {
+                workoutInfo += e.returnStringForSaving();
+            } else {
+                workoutInfo += e.returnStringForSaving() + "\n";
+            }
+
         }
 
-        return listOfExercises;
+        return workoutInfo;
     }
 
-    // EFFECTS: returns a list of string representations of each exercise
+    // EFFECTS: returns list of string with 1st element being workout info
+    //  and the rest being strings of each exercise
     public List<String> returnStringList() {
+        String workoutIdentifier = "workout";
         List<String> list = new ArrayList<>();
+        list.add(workoutIdentifier+ " " + this.getSize() + " " + this.name + " " + this.date);
         for (Exercise e: workout) {
             list.add(e.returnStringForSaving());
         }

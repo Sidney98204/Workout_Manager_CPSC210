@@ -25,7 +25,7 @@ public class ResistanceExercise implements Exercise {
     // EFFECTS: converts String representation of ResistanceExercise objects to something intelligible
     public String toString() {
 
-        return this.name + "(" + this.weight + " lbs)" + ", " + this.sets + " sets " + this.reps + " reps";
+        return this.name + " (" + this.weight + " lbs)" + ", " + this.sets + " sets " + this.reps + " reps";
     }
 
     // REQUIRES:

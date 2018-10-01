@@ -3,6 +3,7 @@ package Test;
 import logbook.Exercise;
 import logbook.ResistanceExercise;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import logbook.Workout;
 
@@ -14,7 +15,7 @@ public class WorkoutTests {
     private ResistanceExercise e;
     private Workout workout;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         e = new ResistanceExercise("Squat", 225, 3, 12);
         workout = new Workout();
@@ -96,6 +97,18 @@ public class WorkoutTests {
     }
 
     @Test
+    public void testSearchExerciseWhenThereAreDuplicates() {
+        ResistanceExercise e1 = new ResistanceExercise("Deadlift", 225, 3, 12);
+        ResistanceExercise e2 = new ResistanceExercise("Deadlift", 305, 4, 8);
+        workout.addExercise(e1);
+        workout.addExercise(e2);
+
+        Exercise e = workout.searchExercise("Deadlift");
+
+        assertEquals(e, e2);
+    }
+
+    @Test
     public void testGetSize() {
         assertEquals(workout.getSize(), 0);
 
@@ -144,13 +157,15 @@ public class WorkoutTests {
         workout.addExercise(e1);
         workout.addExercise(e2);
         String listOfExercises = "Squat (225 lbs), 3 sets 12 reps\n" + "Deadlift (225 lbs), 3 sets 12 reps\n"
-                + "Bench Press (225 lbs), 3 sets 12 reps";
+                + "Bench Press (225 lbs), 3 sets 12 reps\n";
         String workoutToString = workout.toString();
 
         assertEquals(listOfExercises, workoutToString);
 
 
     }
+
+
 
 
 }
