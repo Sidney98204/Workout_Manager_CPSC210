@@ -151,7 +151,7 @@ public class LogbookTests {
 
     }
 
-    /*@Test
+    @Test
     public void testSaving() throws IOException {
         Workout workout2 = new Workout("chest", "01/10/2018");
         workout.addExercise(new ResistanceExercise("Squat", 225, 3, 12));
@@ -181,7 +181,7 @@ public class LogbookTests {
     }
 
     @Test
-    public void testLoad() throws IOException {
+    public void testLoad() throws IOException {    // make sure you check what you have in the save file already
         logbook.load();
 
         assertEquals(logbook.getSize(), 2);
@@ -191,7 +191,7 @@ public class LogbookTests {
 
 
 
-    }*/
+    }
 
 
 
