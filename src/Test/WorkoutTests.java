@@ -18,7 +18,7 @@ public class WorkoutTests {
     @BeforeEach
     public void setUp() {
         e = new ResistanceExercise("Squat", 225, 3, 12);
-        workout = new Workout();
+        workout = new Workout("legs", "01/10/2018");
 
     }
 

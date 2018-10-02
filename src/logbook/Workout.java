@@ -13,14 +13,14 @@ public class Workout {
     // REQUIRES:
     // MODIFIES: this
     // EFFECTS: creates new Workout object with empty list
-    public Workout() {
+    /*public Workout() {
         //this.name = name;
         //this.date = date;
 
         workout = new ArrayList<>();
 
     }
-
+*/
     public Workout(String name, String date) {
         this.name = name;
         this.date = date;
