@@ -38,49 +38,28 @@ public class UserInterface implements Runnable {
             printstartFunctionalities();
             input = reader.nextLine();
             if (input.equals("1")) {
-                System.out.println("Name: ");
-                String workoutName = reader.nextLine();
-                System.out.println("Date: (DD/MM/YYYY)");
-                String workoutDate = reader.nextLine();
-                Workout workout = new Workout(workoutName, workoutDate);            // name and date!!!
-
+                Workout workout = createNewWorkout();
                 while (true) {
                     printWorkoutFunctionalities();
                     input = reader.nextLine();
                     if (input.equals("1")) {                         // hey this is kinda dangerous
-                        System.out.println("Specify type:");
+                        System.out.println("Specify type: [r for Resistance, c for Cardio]");
                         input = reader.nextLine();
                         if (input.equals("r")) {
-                            System.out.println("Name:");
-                            String name = reader.nextLine();
-                            System.out.println("Weight:");
-                            int weight = Integer.parseInt(reader.nextLine());
-                            System.out.println("Sets:");
-                            int sets = Integer.parseInt(reader.nextLine());
-                            System.out.println("Reps:");
-                            int reps = Integer.parseInt(reader.nextLine());
-                            workout.addExercise(new ResistanceExercise(name, weight, sets, reps));
+                            addResistanceExerciseToWorkout(workout);
+
                         } else if (input.equals("c")) {
-                            System.out.println("Name: ");
-                            String name = reader.nextLine();
-                            System.out.println("Duration:");
-                            int duration = Integer.parseInt(reader.nextLine());
-                            System.out.println("Intensity:");
-                            String intensity = reader.nextLine();
-                            workout.addExercise(new CardioExercise(name, duration, intensity));
+                            addCardioExerciseToWorkout(workout);
+
                         }
 
                     } else if (input.equals("2")) {
-                        System.out.println("Enter name of exercise: ");
-                        String name = reader.nextLine();
-                        Exercise exercise = workout.searchExercise(name);
-                        System.out.println(exercise);
+                        searchExerciseFromWorkout(workout);
+
 
                     } else if (input.equals("3")) {
-                        System.out.println("Enter name of exercise: ");
-                        String name = reader.nextLine();
-                        Exercise exercise = workout.searchExercise(name);
-                        workout.removeExercise(exercise);
+                        removeExerciseFromWorkout(workout);
+
 
                     } else if (input.equals("4")) {
                         workout.printWorkout();
@@ -96,30 +75,17 @@ public class UserInterface implements Runnable {
 
 
             } else if (input.equals("2")) {
-                System.out.println("Enter name of workout: ");
-                String workoutName = reader.nextLine();
-                Workout workout = logbook.searchWorkout(workoutName);
-                logbook.removeWorkout(workout);
+                removeWorkoutFromLogbook();
+
             }
             else if (input.equals("3")) {
-                System.out.println("Enter name of workout: ");
-                String workoutName = reader.nextLine();
-                Workout workout = logbook.searchWorkout(workoutName);
-                workout.printWorkout();
+                searchForWorkoutInLogbook();
+
 
 
             } else if (input.equals("4")) {
-                System.out.println("Enter name of exercise:");
-                String exerciseName = reader.nextLine();
-                Exercise exercise = null;
-                for (int i = logbook.getSize() -1; i >= 0; i--) {
-                    Workout workout = logbook.getLogbook().get(i);
-                    exercise = workout.searchExercise(exerciseName);
-                    if (exercise != null) {
-                        break;
-                    }
-                }
-                System.out.println(exercise);
+                searchExerciseInLogbook();
+
 
             } else if (input.equals("x")) {
                 System.out.println("Would you like to save your changes?");
@@ -183,6 +149,84 @@ public class UserInterface implements Runnable {
 
     public void createComponents(Container container) {
 
+    }
+
+    //EFFECTS: prompts user for name and date of workout, then creates workout object and returns it
+    public Workout createNewWorkout() {
+        System.out.println("Name: ");
+        String workoutName = reader.nextLine();
+        System.out.println("Date: (DD/MM/YYYY)");
+        String workoutDate = reader.nextLine();
+        Workout workout = new Workout(workoutName, workoutDate);
+        return workout;
+    }
+
+
+    // EFFECTS: prompts user for exercise info, then adds instantiated exercise to workout
+    public void addResistanceExerciseToWorkout(Workout workout) {
+        System.out.println("Name:");
+        String name = reader.nextLine();
+        System.out.println("Weight:");
+        int weight = Integer.parseInt(reader.nextLine());
+        System.out.println("Sets:");
+        int sets = Integer.parseInt(reader.nextLine());
+        System.out.println("Reps:");
+        int reps = Integer.parseInt(reader.nextLine());
+        workout.addExercise(new ResistanceExercise(name, weight, sets, reps));
+    }
+
+    // EFFECTS:
+    public void addCardioExerciseToWorkout(Workout workout) {
+        System.out.println("Name: ");
+        String name = reader.nextLine();
+        System.out.println("Duration:");
+        int duration = Integer.parseInt(reader.nextLine());
+        System.out.println("Intensity:");
+        String intensity = reader.nextLine();
+        workout.addExercise(new CardioExercise(name, duration, intensity));
+    }
+
+    public void searchExerciseFromWorkout(Workout workout) {
+        System.out.println("Enter name of exercise: ");
+        String name = reader.nextLine();
+        Exercise exercise = workout.searchExercise(name);
+        System.out.println(exercise);
+
+    }
+
+    public void removeExerciseFromWorkout(Workout workout) {
+        System.out.println("Enter name of exercise: ");
+        String name = reader.nextLine();
+        Exercise exercise = workout.searchExercise(name);
+        workout.removeExercise(exercise);
+    }
+
+    public void removeWorkoutFromLogbook() {
+        System.out.println("Enter name of workout: ");
+        String workoutName = reader.nextLine();
+        Workout workout = logbook.searchWorkout(workoutName);
+        logbook.removeWorkout(workout);
+    }
+
+    public void searchForWorkoutInLogbook() {
+        System.out.println("Enter name of workout: ");
+        String workoutName = reader.nextLine();
+        Workout workout = logbook.searchWorkout(workoutName);
+        System.out.println(workout);
+    }
+
+    public void searchExerciseInLogbook() {
+        System.out.println("Enter name of exercise:");
+        String exerciseName = reader.nextLine();
+        Exercise exercise = null;
+        for (int i = logbook.getSize() -1; i >= 0; i--) {
+            Workout workout = logbook.getLogbook().get(i);
+            exercise = workout.searchExercise(exerciseName);
+            if (exercise != null) {
+                break;
+            }
+        }
+        System.out.println(exercise);
     }
 
 

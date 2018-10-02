@@ -1,8 +1,7 @@
 package logbook;
 
 
-public class ResistanceExercise implements Exercise {
-    private String name;
+public class ResistanceExercise extends Exercise {
     private int reps;
     private int weight;
     private int sets;
@@ -11,7 +10,7 @@ public class ResistanceExercise implements Exercise {
     // MODIFIES: this
     // EFFECTS: creates new exercise object w/ given parameters
     public ResistanceExercise(String name, int weight, int sets, int reps) {
-        this.name = name;
+        super(name);
         this.reps = reps;
         this.weight = weight;
         this.sets = sets;
@@ -39,7 +38,7 @@ public class ResistanceExercise implements Exercise {
     // EFFECTS: returns name of this
 
     public String getName() {
-        return name;
+        return this.name;
     }
     // REQUIRES:
     // MODIFIES:

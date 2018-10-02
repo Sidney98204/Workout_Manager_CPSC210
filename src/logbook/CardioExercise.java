@@ -1,7 +1,7 @@
 package logbook;
 
-public class CardioExercise implements Exercise {
-    private String name;
+public class CardioExercise extends Exercise {
+
     private int duration;
     private String intensity;
     //private Intensity intensity;
@@ -11,10 +11,10 @@ public class CardioExercise implements Exercise {
     // MODIFIES:
     // EFFECTS:
     public CardioExercise(String name, int duration, String intensity) {
-        this.name = name;
+        super(name);
         this.duration = duration;
         this.intensity = intensity;
-        //this.intensity = intensity;
+
     }
 
     @Override
@@ -22,7 +22,7 @@ public class CardioExercise implements Exercise {
     // MODIFIES:
     // EFFECTS: returns name
     public String getName() {
-        return name;
+        return this.name;
     }
 
     // EFFECTS: returns duration
@@ -40,7 +40,7 @@ public class CardioExercise implements Exercise {
     // MODIFIES:
     // EFFECTS: converts string representation of CardioExercise to something intelligible and returns it
     public String toString() {
-        return name + ": " + duration + " mins (" + intensity + ")";
+        return this.name + ": " + duration + " mins (" + intensity + ")";
     }
 
 
