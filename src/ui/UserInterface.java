@@ -1,5 +1,9 @@
 package ui;
 
+import Exceptions.TooHeavyException;
+import Exceptions.TooManyRepsException;
+import Exceptions.TooManySetsException;
+import Exceptions.TooMuchTimeException;
 import com.sun.org.apache.xpath.internal.SourceTree;
 import logbook.*;
 
@@ -21,11 +25,20 @@ public class UserInterface implements Runnable {
 
     private Logbook logbook;
 
+    // max weight,sets etc constants
+
 
     public UserInterface() {
         reader = new Scanner(System.in);
 
         logbook = new Logbook();
+    }
+
+    public UserInterface(Scanner reader) {
+        this.reader = reader;
+        logbook = new Logbook();
+
+        // THIS CONSTRUCTOR IS FOR TESTING
     }
 
     public void start() throws IOException {
@@ -46,11 +59,33 @@ public class UserInterface implements Runnable {
                         System.out.println("Specify type: [r for Resistance, c for Cardio]");
                         input = reader.nextLine();
                         if (input.equals("r")) {
-                            addResistanceExerciseToWorkout(workout);
+                            try {
+                                addResistanceExerciseToWorkout(workout);
+                            } catch(NumberFormatException e) {
+                                System.out.println("Invalid entry");
+                            } catch(TooHeavyException e) {
+                                System.out.println("That's too heavy!");
+                            } catch(TooManySetsException e) {
+                                System.out.println("That's too many sets!");
+                            } catch(TooManyRepsException e) {
+                                System.out.println("That's too many reps!");
+                            }
+
 
                         } else if (input.equals("c")) {
-                            addCardioExerciseToWorkout(workout);
+                            try {
+                                addCardioExerciseToWorkout(workout);
+                            } catch(TooMuchTimeException e) {
+                                System.out.println("That's for too long!");
 
+                            } catch(NumberFormatException e) {
+                                System.out.println("Invalid entry");
+
+                            }
+
+
+                        } else {
+                            System.out.println("Invalid exercise type, try again");
                         }
 
                     } else if (input.equals("2")) {
@@ -163,24 +198,37 @@ public class UserInterface implements Runnable {
 
 
     // EFFECTS: prompts user for exercise info, then adds instantiated exercise to workout
-    public void addResistanceExerciseToWorkout(Workout workout) {
+    public void addResistanceExerciseToWorkout(Workout workout) throws TooHeavyException, TooManySetsException,
+    TooManyRepsException{
         System.out.println("Name:");
         String name = reader.nextLine();
         System.out.println("Weight:");
         int weight = Integer.parseInt(reader.nextLine());
+        if (weight > 1000) {
+            throw new TooHeavyException();
+        }
         System.out.println("Sets:");
         int sets = Integer.parseInt(reader.nextLine());
+        if (sets > 20) {
+            throw new TooManySetsException();
+        }
         System.out.println("Reps:");
         int reps = Integer.parseInt(reader.nextLine());
+        if (reps > 100) {
+            throw new TooManyRepsException();
+        }
         workout.addExercise(new ResistanceExercise(name, weight, sets, reps));
     }
 
     // EFFECTS:
-    public void addCardioExerciseToWorkout(Workout workout) {
+    public void addCardioExerciseToWorkout(Workout workout) throws TooMuchTimeException {
         System.out.println("Name: ");
         String name = reader.nextLine();
         System.out.println("Duration:");
         int duration = Integer.parseInt(reader.nextLine());
+        if (duration > 300) {
+            throw new TooMuchTimeException();
+        }
         System.out.println("Intensity:");
         String intensity = reader.nextLine();
         workout.addExercise(new CardioExercise(name, duration, intensity));
