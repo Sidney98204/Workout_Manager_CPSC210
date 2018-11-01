@@ -3,17 +3,16 @@ package logbook;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-public class Logbook implements Loadable, Saveable {
+public class Logbook {
     private ArrayList<Workout> logbook;
+    private Map<Date, Workout> map;
 
     // EFFECTS: creates new logbook object with empty list
     public Logbook() {
         logbook = new ArrayList<>();
+        map = new HashMap<>();
 
     }
 
@@ -46,7 +45,7 @@ public class Logbook implements Loadable, Saveable {
         }
     }
 
-    //EFFECTS: returns most recently added workout with given name, returns null if not found in logbook
+   /* //EFFECTS: returns most recently added workout with given name, returns null if not found in logbook
     public Workout searchWorkout(String name) {
         Workout workout = null;
         for (Workout w: logbook) {
@@ -56,7 +55,11 @@ public class Logbook implements Loadable, Saveable {
         }
 
         return workout;
-    }
+    }*/
+
+   public Workout searchWorkout(Date date) {
+       return map.get(date);
+   }
 
     // EFFECTS: returns list of string representations of workouts in logbook
     public List<String> returnStringList() {
@@ -69,8 +72,8 @@ public class Logbook implements Loadable, Saveable {
     }
 
 
-    // EFFECTS: loads previously saved info into the program
-    public void load() throws IOException {
+  /*  // EFFECTS: loads previously saved info into the program
+    *//*public void load() throws IOException {
         String workoutIdentifier = "workout";
         String cardioIdentifier = "Cardio:";
         String resistanceIdentifier = "Resistance:";
@@ -99,8 +102,8 @@ public class Logbook implements Loadable, Saveable {
                 }
                 this.addWorkout(workout);
             }
-        }
-        /*List<String> lines = Files.readAllLines(Paths.get("savefile.text"));   // how come this doesn't work?
+        }*//*
+        *//*List<String> lines = Files.readAllLines(Paths.get("savefile.text"));   // how come this doesn't work?
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             ArrayList<String> partsOfLine = splitOnSpace(line);
@@ -124,20 +127,20 @@ public class Logbook implements Loadable, Saveable {
                 logbook.addWorkout(workout);
 
 
-            *//*if (partsOfLine.get(0).equals("Cardio:")) {
+            *//**//*if (partsOfLine.get(0).equals("Cardio:")) {
                 workout.addExercise(new CardioExercise(partsOfLine.get(1),
                         Integer.parseInt(partsOfLine.get(2)), partsOfLine.get(3)));
             } else if (partsOfLine.get(0).equals("Resistance:")) {
                 workout.addExercise(new ResistanceExercise(partsOfLine.get(1),
                         Integer.parseInt(partsOfLine.get(2)),
                         Integer.parseInt(partsOfLine.get(3)),
-                        Integer.parseInt(partsOfLine.get(4))));*//*
+                        Integer.parseInt(partsOfLine.get(4))));*//**//*
             }
 
-        }*/
+        }*//*
 
 
-    }
+    }*/
 
     // EFFECTS: saves inputted information into a file
     public void save() throws IOException {
@@ -150,6 +153,10 @@ public class Logbook implements Loadable, Saveable {
         writer.close();
 
 
+    }
+
+    public void put(Date date, Workout workout) {
+        map.put(date, workout);
     }
 
     // EFFECTS: splits up given string by its spaces

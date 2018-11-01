@@ -7,8 +7,9 @@ import java.util.List;
 
 public class Workout {
     private String name;
-    private String date;
+    private Date date;
     private ArrayList<Exercise> workout;
+    private List<Person> persons;
 
     // REQUIRES:
     // MODIFIES: this
@@ -21,10 +22,11 @@ public class Workout {
 
     }
 */
-    public Workout(String name, String date) {
+    public Workout(String name, Date date) {
         this.name = name;
         this.date = date;
         workout = new ArrayList<>();
+        persons = new ArrayList<>();
     }
 
     /*// EFFECTS: sets name of workout
@@ -32,9 +34,29 @@ public class Workout {
         this.name = name;
     }
 
+
+
     public void setDate(String date) {
         this.date = date;
     }*/
+
+    public List<Person> getPeople() {
+        return persons;
+    }
+
+    public void addPerson(Person p) {
+        if (!persons.contains(p)) {
+            persons.add(p);
+            p.addWorkout(this);
+        }
+    }
+
+    public void removePerson(Person p) {
+        if (persons.contains(p)) {
+            persons.remove(p);
+            p.removeWorkout(this);
+        }
+    }
 
     // EFFECTS: returns name
     public String getName() {
@@ -42,7 +64,7 @@ public class Workout {
     }
 
     // EFFECTS: returns date
-    public String getDate() {
+    public Date getDate() {
         return this.date;
 
     }

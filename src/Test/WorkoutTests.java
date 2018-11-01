@@ -1,5 +1,6 @@
 package Test;
 
+import logbook.Date;
 import logbook.Exercise;
 import logbook.ResistanceExercise;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,7 +19,7 @@ public class WorkoutTests {
     @BeforeEach
     public void setUp() {
         e = new ResistanceExercise("Squat", 225, 3, 12);
-        workout = new Workout("legs", "01/10/2018");
+        workout = new Workout("legs", new Date(01,10,2018));
 
     }
 

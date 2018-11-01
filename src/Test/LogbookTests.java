@@ -22,7 +22,7 @@ public class LogbookTests {
     // How many tests do I need? Do i really need empty list, single element, multiple elements?
     // Do I really need to test methods like isInsideOf? How would I even test it without using it itself?
 
-    @BeforeEach
+  /*  @BeforeEach
     public void setup() {
         logbook = new Logbook();
         workout = new Workout("legs", "00/00/0000");
@@ -191,7 +191,7 @@ public class LogbookTests {
 
 
 
-    }
+    }*/
 
 
 

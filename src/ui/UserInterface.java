@@ -24,6 +24,8 @@ public class UserInterface implements Runnable {
     private Scanner reader;
 
     private Logbook logbook;
+    private List<Person> persons;
+
 
     // max weight,sets etc constants
 
@@ -32,6 +34,7 @@ public class UserInterface implements Runnable {
         reader = new Scanner(System.in);
 
         logbook = new Logbook();
+        persons = new ArrayList<>();
     }
 
     public UserInterface(Scanner reader) {
@@ -43,7 +46,7 @@ public class UserInterface implements Runnable {
 
     public void start() throws IOException {
         printIntro();
-        logbook.load();
+//        logbook.load();
         String input;
 
         while (true) {
@@ -101,8 +104,13 @@ public class UserInterface implements Runnable {
 
                     } else if (input.equals("x")) {
 
-                        logbook.addWorkout(workout);         // NOTE: you should be adding workouts in
+                        logbook.addWorkout(workout);
+                        logbook.put(workout.getDate(), workout);                                        // NOTE: you should be adding workouts in
                         break;                                // chronological order
+                    } else if (input.equals("p")) {
+                        addPersonToWorkout(workout);
+                    } else if (input.equals("6")) {
+                        printPeople(workout);
                     }
                 }
 
@@ -110,7 +118,7 @@ public class UserInterface implements Runnable {
 
 
             } else if (input.equals("2")) {
-                removeWorkoutFromLogbook();
+//                removeWorkoutFromLogbook();
 
             }
             else if (input.equals("3")) {
@@ -118,16 +126,27 @@ public class UserInterface implements Runnable {
 
 
 
+
             } else if (input.equals("4")) {
                 searchExerciseInLogbook();
 
 
+            } else if (input.equals("p")) {
+                searchPerson();
+
+            } else if(input.equals("person")) {
+                addWorkoutToPerson();
+
+            } else if (input.equals("a")) {
+                removeWorkoutFromPerson();
+            } else if (input.equals("b")) {
+                removePersonFromWorkout();
             } else if (input.equals("x")) {
                 System.out.println("Would you like to save your changes?");
                 input = reader.nextLine();
                 if (input.equals("yes")) {
                     try {
-                        logbook.save();
+//                        logbook.save();
                     } catch(Exception e) {
 
                     }
@@ -157,6 +176,10 @@ public class UserInterface implements Runnable {
         System.out.println("[2] Remove workout");
         System.out.println("[3] Search for workout");
         System.out.println("[4] Search for exercise");
+        System.out.println("[person] Add workout to person");
+        System.out.println("[p] Search for person and print their workouts");
+        System.out.println("[a] Remove workout from person");
+        System.out.println("[b] Remove person from workout");
         System.out.println("[x] Quit");
 
 
@@ -169,7 +192,10 @@ public class UserInterface implements Runnable {
         System.out.println("[2] Search for exercise");
         System.out.println("[3] Remove exercise");
         System.out.println("[4] Print workout");
+        System.out.println("[p] Add person to workout");
+        System.out.println("[6] print people in workout");
         System.out.println("[x] Done");
+
     }
 
     public void run() {
@@ -192,7 +218,11 @@ public class UserInterface implements Runnable {
         String workoutName = reader.nextLine();
         System.out.println("Date: (DD/MM/YYYY)");
         String workoutDate = reader.nextLine();
-        Workout workout = new Workout(workoutName, workoutDate);
+        ArrayList<String> lines = splitOnSlash(workoutDate);
+        Date date = new Date(Integer.parseInt(lines.get(0)),
+                Integer.parseInt(lines.get(1)), Integer.parseInt(lines.get(2)));
+
+        Workout workout = new Workout(workoutName, date);
         return workout;
     }
 
@@ -249,18 +279,31 @@ public class UserInterface implements Runnable {
         workout.removeExercise(exercise);
     }
 
-    public void removeWorkoutFromLogbook() {
+    /*public void removeWorkoutFromLogbook() {
         System.out.println("Enter name of workout: ");
         String workoutName = reader.nextLine();
         Workout workout = logbook.searchWorkout(workoutName);
         logbook.removeWorkout(workout);
-    }
+    }*/
 
-    public void searchForWorkoutInLogbook() {
+    /*public void searchForWorkoutInLogbook() {
         System.out.println("Enter name of workout: ");
         String workoutName = reader.nextLine();
         Workout workout = logbook.searchWorkout(workoutName);
         System.out.println(workout);
+    }*/
+
+    public void searchForWorkoutInLogbook() {
+        System.out.println("Enter date of workout: ");
+        String workoutDate = reader.nextLine();
+        ArrayList<String> lines = splitOnSlash(workoutDate);
+        int day = Integer.parseInt(lines.get(0));
+        int month = Integer.parseInt(lines.get(1));
+        int year = Integer.parseInt(lines.get(2));
+        Workout workout = logbook.searchWorkout(new Date(day,month,year));
+        workout.printWorkout();
+        System.out.println(workout.getPeople());
+
     }
 
     public void searchExerciseInLogbook() {
@@ -275,6 +318,105 @@ public class UserInterface implements Runnable {
             }
         }
         System.out.println(exercise);
+    }
+
+    public static ArrayList<String> splitOnSlash(String line) {
+        String[] splits = line.split("/");
+        return new ArrayList<>(Arrays.asList(splits));
+    }
+
+    public void searchPerson() {
+        System.out.println("Name? ");
+        String name = reader.nextLine();
+        for (Person p: persons) {
+            if (p.getName().equals(name)) {
+                System.out.println(p.getWorkouts());
+            }
+        }
+    }
+
+    public void addPersonToWorkout(Workout workout) {
+        System.out.println("Name: ");
+        String name = reader.nextLine();
+        Person p = new Person(name);
+        workout.addPerson(p);
+        persons.add(p);
+
+    }
+
+
+
+    public void printPeople(Workout workout) {
+        System.out.println(workout.getPeople());
+    }
+
+    public void addWorkoutToPerson() {
+        System.out.println("Name of person:");
+        String personName = reader.nextLine();
+        Person p = new Person(personName);
+        for (Person person: persons) {
+            if (person.getName().equals(personName)) {
+                p = person;
+            }
+        }
+
+
+
+        System.out.println("Date of workout:");
+        String workoutDate = reader.nextLine();
+        ArrayList<String> lines = splitOnSlash(workoutDate);
+        int day = Integer.parseInt(lines.get(0));
+        int month = Integer.parseInt(lines.get(1));
+        int year = Integer.parseInt(lines.get(2));
+        Workout workout = logbook.searchWorkout(new Date(day,month,year));
+        workout.addPerson(p);
+        if (!persons.contains(p)) {
+            persons.add(p);
+        }
+
+
+    }
+
+    public void removeWorkoutFromPerson() {
+        System.out.println("Name of person:");
+        String personName = reader.nextLine();
+        Person p = null;  // HEEEYYYYYYYY ITS NULLLLLLLL
+        for (Person person: persons) {
+            if (person.getName().equals(personName)) {
+                p = person;
+            }
+        }
+
+        System.out.println("Date of workout:");
+        String workoutDate = reader.nextLine();
+        ArrayList<String> lines = splitOnSlash(workoutDate);
+        int day = Integer.parseInt(lines.get(0));
+        int month = Integer.parseInt(lines.get(1));
+        int year = Integer.parseInt(lines.get(2));
+        Workout workout = logbook.searchWorkout(new Date(day,month,year));
+        p.removeWorkout(workout);
+
+    }
+
+    public void removePersonFromWorkout() {
+        System.out.println("Name of person:");
+        String personName = reader.nextLine();
+        Person p = null;  // HEEEYYYYYYYY ITS NULLLLLLLL
+        for (Person person: persons) {
+            if (person.getName().equals(personName)) {
+                p = person;
+            }
+        }
+
+        System.out.println("Date of workout:");
+        String workoutDate = reader.nextLine();
+        ArrayList<String> lines = splitOnSlash(workoutDate);
+        int day = Integer.parseInt(lines.get(0));
+        int month = Integer.parseInt(lines.get(1));
+        int year = Integer.parseInt(lines.get(2));
+        Workout workout = logbook.searchWorkout(new Date(day,month,year));
+        workout.removePerson(p);
+
     }
 
 

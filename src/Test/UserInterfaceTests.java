@@ -4,6 +4,7 @@ import Exceptions.TooHeavyException;
 import Exceptions.TooManyRepsException;
 import Exceptions.TooManySetsException;
 import Exceptions.TooMuchTimeException;
+import logbook.Date;
 import logbook.Workout;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +25,7 @@ public class UserInterfaceTests {
 
     @BeforeEach
     public void test() {
-        workout = new Workout("A", "date");
+        workout = new Workout("A", new Date(01,10,2018));
 
 
     }
@@ -231,5 +232,7 @@ public class UserInterfaceTests {
         }
 
     }
+
+
 
 }
