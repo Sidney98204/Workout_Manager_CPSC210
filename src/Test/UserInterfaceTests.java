@@ -1,9 +1,5 @@
 package Test;
 
-import Exceptions.TooHeavyException;
-import Exceptions.TooManyRepsException;
-import Exceptions.TooManySetsException;
-import Exceptions.TooMuchTimeException;
 import logbook.Date;
 import logbook.Workout;
 import org.junit.jupiter.api.BeforeEach;

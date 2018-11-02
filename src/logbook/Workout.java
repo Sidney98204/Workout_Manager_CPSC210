@@ -29,7 +29,7 @@ public class Workout {
         persons = new ArrayList<>();
     }
 
-    /*// EFFECTS: sets name of workout
+    // EFFECTS: sets name of workout
     public void setName(String name) {
         this.name = name;
     }
@@ -38,7 +38,7 @@ public class Workout {
 
     public void setDate(String date) {
         this.date = date;
-    }*/
+    }
 
     public List<Person> getPeople() {
         return persons;
@@ -165,7 +165,7 @@ public class Workout {
 
     // EFFECTS: returns list of string with 1st element being workout info
     //  and the rest being strings of each exercise
-    /*public List<String> returnStringList() {
+    public List<String> returnStringList() {
         String workoutIdentifier = "workout";
         List<String> list = new ArrayList<>();
         list.add(workoutIdentifier+ " " + this.getSize() + " " + this.name + " " + this.date);
@@ -174,7 +174,7 @@ public class Workout {
         }
 
         return list;
-    }*/
+    }
 
 
 }
