@@ -19,12 +19,16 @@ import static logbook.Intensity.LOW;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         UserInterface ui = new UserInterface();
         //   SwingUtilities.invokeLater(ui);
 
 
-        ui.start();
+        try {
+            ui.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
     }

@@ -7,9 +7,8 @@ import java.util.List;
 
 public class Workout {
     private String name;
-    private Date date;
+    private String date;
     private ArrayList<Exercise> workout;
-    private List<Person> persons;
 
     // REQUIRES:
     // MODIFIES: this
@@ -22,41 +21,20 @@ public class Workout {
 
     }
 */
-    public Workout(String name, Date date) {
+    public Workout(String name, String date) {
         this.name = name;
         this.date = date;
         workout = new ArrayList<>();
-        persons = new ArrayList<>();
     }
 
-    // EFFECTS: sets name of workout
+    /*// EFFECTS: sets name of workout
     public void setName(String name) {
         this.name = name;
     }
 
-
-
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public List<Person> getPeople() {
-        return persons;
-    }
-
-    public void addPerson(Person p) {
-        if (!persons.contains(p)) {
-            persons.add(p);
-            p.addWorkout(this);
-        }
-    }
-
-    public void removePerson(Person p) {
-        if (persons.contains(p)) {
-            persons.remove(p);
-            p.removeWorkout(this);
-        }
-    }
+    }*/
 
     // EFFECTS: returns name
     public String getName() {
@@ -64,7 +42,7 @@ public class Workout {
     }
 
     // EFFECTS: returns date
-    public Date getDate() {
+    public String getDate() {
         return this.date;
 
     }
@@ -165,7 +143,7 @@ public class Workout {
 
     // EFFECTS: returns list of string with 1st element being workout info
     //  and the rest being strings of each exercise
-    public List<String> returnStringList() {
+    /*public List<String> returnStringList() {
         String workoutIdentifier = "workout";
         List<String> list = new ArrayList<>();
         list.add(workoutIdentifier+ " " + this.getSize() + " " + this.name + " " + this.date);
@@ -174,7 +152,7 @@ public class Workout {
         }
 
         return list;
-    }
+    }*/
 
 
 }
