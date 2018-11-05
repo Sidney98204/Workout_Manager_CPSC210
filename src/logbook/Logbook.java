@@ -10,6 +10,8 @@ import java.util.Scanner;
 
 public class Logbook implements Loadable, Saveable {
     private ArrayList<Workout> logbook;
+    private Loader loader;
+    private Saver saver;
 
     // EFFECTS: creates new logbook object with empty list
     public Logbook() {
@@ -71,6 +73,8 @@ public class Logbook implements Loadable, Saveable {
 
     // EFFECTS: loads previously saved info into the program
     public void load() throws IOException {
+
+        // THIS METHOD IS HEAVILY DEPENDENT ON SAVE, AND RETURNSTRINGFORSAVING
         String workoutIdentifier = "workout";
         String cardioIdentifier = "Cardio:";
         String resistanceIdentifier = "Resistance:";
@@ -142,6 +146,8 @@ public class Logbook implements Loadable, Saveable {
     // EFFECTS: saves inputted information into a file
     public void save() throws IOException {
 
+        // THIS METHOD IS HEAVILY DEPENDENT ON RETURNSTRINGLIST, LOAD, W.RETURNSTRING() AND OTHERS (?)
+
         List<String> lines = this.returnStringList();
         PrintWriter writer = new PrintWriter("savefile.text", "UTF-8");
         for (String line: lines) {
@@ -154,6 +160,8 @@ public class Logbook implements Loadable, Saveable {
 
     // EFFECTS: splits up given string by its spaces
     public static ArrayList<String> splitOnSpace(String line) {
+
+        // lack of cohesion here
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));
     }

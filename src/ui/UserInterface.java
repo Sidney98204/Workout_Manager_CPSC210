@@ -4,26 +4,22 @@ import Exceptions.TooHeavyException;
 import Exceptions.TooManyRepsException;
 import Exceptions.TooManySetsException;
 import Exceptions.TooMuchTimeException;
-import com.sun.org.apache.xpath.internal.SourceTree;
 import logbook.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
-import java.util.List;
 
 public class UserInterface implements Runnable {
     private JFrame frame;
     private Scanner reader;
-
     private Logbook logbook;
+
+    public static final int MAX_WEIGHT = 1000;
+    public static final int MAX_SETS = 20;
+    public static final int MAX_REPS = 100;
+    public static final int MAX_TIME = 300;
 
     // max weight,sets etc constants
 
@@ -152,24 +148,28 @@ public class UserInterface implements Runnable {
     }
 
     public void printstartFunctionalities() {
-
-        System.out.println("[1] Create new workout");
-        System.out.println("[2] Remove workout");
-        System.out.println("[3] Search for workout");
-        System.out.println("[4] Search for exercise");
-        System.out.println("[x] Quit");
-
+        printOption("1", "Create new workout");
+        printOption("2", "Remove workout");
+        printOption("3", "Search for workout");
+        printOption("4", "Search for exercise");
+        printOption("x", "Quit");
 
 
+        // COUPLINGGG!!!
+        // I changed this from simple sout calls to method calls
 
     }
 
     public void printWorkoutFunctionalities() {
-        System.out.println("[1] Add exercise");
-        System.out.println("[2] Search for exercise");
-        System.out.println("[3] Remove exercise");
-        System.out.println("[4] Print workout");
-        System.out.println("[x] Done");
+        printOption("1", "Add exercise");
+        printOption("2", "Search for exercise");
+        printOption("3", "Remove exercise");
+        printOption("4", "Print workout");
+        printOption("x", "Done");
+
+
+        // COUPLINGGGGGGG!!!!!
+        // abstracted into method
     }
 
     public void run() {
@@ -188,8 +188,7 @@ public class UserInterface implements Runnable {
 
     //EFFECTS: prompts user for name and date of workout, then creates workout object and returns it
     public Workout createNewWorkout() {
-        System.out.println("Name: ");
-        String workoutName = reader.nextLine();
+        String workoutName = askUserToProvideInfoToCreate("Name");   // removed duplication here
         System.out.println("Date: (DD/MM/YYYY)");
         String workoutDate = reader.nextLine();
         Workout workout = new Workout(workoutName, workoutDate);
@@ -200,21 +199,21 @@ public class UserInterface implements Runnable {
     // EFFECTS: prompts user for exercise info, then adds instantiated exercise to workout
     public void addResistanceExerciseToWorkout(Workout workout) throws TooHeavyException, TooManySetsException,
     TooManyRepsException{
-        System.out.println("Name:");
-        String name = reader.nextLine();
-        System.out.println("Weight:");
-        int weight = Integer.parseInt(reader.nextLine());
-        if (weight > 1000) {
+
+        String name = askUserToProvideInfoToCreate("Name");          // removed duplication here
+
+        int weight = Integer.parseInt(askUserToProvideInfoToCreate("Weight"));
+        if (weight > MAX_WEIGHT) {
             throw new TooHeavyException();
         }
-        System.out.println("Sets:");
-        int sets = Integer.parseInt(reader.nextLine());
-        if (sets > 20) {
+
+        int sets = Integer.parseInt(askUserToProvideInfoToCreate("Sets"));
+        if (sets > MAX_SETS) {
             throw new TooManySetsException();
         }
-        System.out.println("Reps:");
-        int reps = Integer.parseInt(reader.nextLine());
-        if (reps > 100) {
+
+        int reps = Integer.parseInt(askUserToProvideInfoToCreate("Reps"));
+        if (reps > MAX_REPS) {
             throw new TooManyRepsException();
         }
         workout.addExercise(new ResistanceExercise(name, weight, sets, reps));
@@ -222,50 +221,49 @@ public class UserInterface implements Runnable {
 
     // EFFECTS:
     public void addCardioExerciseToWorkout(Workout workout) throws TooMuchTimeException {
-        System.out.println("Name: ");
-        String name = reader.nextLine();
-        System.out.println("Duration:");
-        int duration = Integer.parseInt(reader.nextLine());
-        if (duration > 300) {
+
+        String name = askUserToProvideInfoToCreate("Name");              // removed duplication here
+
+        int duration = Integer.parseInt(askUserToProvideInfoToCreate("Duration"));
+        if (duration > MAX_TIME) {
             throw new TooMuchTimeException();
         }
-        System.out.println("Intensity:");
-        String intensity = reader.nextLine();
+
+        String intensity = askUserToProvideInfoToCreate("Intensity");
         workout.addExercise(new CardioExercise(name, duration, intensity));
     }
 
     public void searchExerciseFromWorkout(Workout workout) {
-        System.out.println("Enter name of exercise: ");
-        String name = reader.nextLine();
+
+        String name = askUserForNameOfToSearch("exercise");
         Exercise exercise = workout.searchExercise(name);
         System.out.println(exercise);
 
     }
 
     public void removeExerciseFromWorkout(Workout workout) {
-        System.out.println("Enter name of exercise: ");
-        String name = reader.nextLine();
+
+        String name = askUserForNameOfToSearch("exercise");
         Exercise exercise = workout.searchExercise(name);
         workout.removeExercise(exercise);
     }
 
     public void removeWorkoutFromLogbook() {
-        System.out.println("Enter name of workout: ");
-        String workoutName = reader.nextLine();
+
+        String workoutName = askUserForNameOfToSearch("workout");
         Workout workout = logbook.searchWorkout(workoutName);
         logbook.removeWorkout(workout);
     }
 
     public void searchForWorkoutInLogbook() {
-        System.out.println("Enter name of workout: ");
-        String workoutName = reader.nextLine();
+
+        String workoutName = askUserForNameOfToSearch("workout");
         Workout workout = logbook.searchWorkout(workoutName);
         System.out.println(workout);
     }
 
     public void searchExerciseInLogbook() {
-        System.out.println("Enter name of exercise:");
-        String exerciseName = reader.nextLine();
+        String exerciseName = askUserForNameOfToSearch("exercise");
         Exercise exercise = null;
         for (int i = logbook.getSize() -1; i >= 0; i--) {
             Workout workout = logbook.getLogbook().get(i);
@@ -275,6 +273,28 @@ public class UserInterface implements Runnable {
             }
         }
         System.out.println(exercise);
+    }
+
+    public String askUserToProvideInfoToCreate(String forWhat) {
+        System.out.println(forWhat + ": ");
+        return askUserForInput();
+    }
+
+    public String askUserForNameOfToSearch(String object) {
+        System.out.println("Enter name of " + object + ": ");
+        return askUserForInput();
+
+    }
+
+    public String askUserForInput() {
+        String input = reader.nextLine();
+        return input;
+    }
+
+    public void printOption(String option, String instruction) {
+        System.out.println("[" + option + "] " + instruction);
+
+        // i abstracted into a method for the printFunctionalities
     }
 
 
