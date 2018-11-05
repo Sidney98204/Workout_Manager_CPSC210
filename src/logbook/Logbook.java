@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
-public class Logbook implements Loadable, Saveable {
+public class Logbook {
     private ArrayList<Workout> logbook;
     private Loader loader;
     private Saver saver;
@@ -16,6 +16,8 @@ public class Logbook implements Loadable, Saveable {
     // EFFECTS: creates new logbook object with empty list
     public Logbook() {
         logbook = new ArrayList<>();
+        loader = new Loader(this);
+        saver = new Saver(this);
 
     }
 
@@ -73,8 +75,9 @@ public class Logbook implements Loadable, Saveable {
 
     // EFFECTS: loads previously saved info into the program
     public void load() throws IOException {
+        loader.load();
 
-        // THIS METHOD IS HEAVILY DEPENDENT ON SAVE, AND RETURNSTRINGFORSAVING
+       /* // THIS METHOD IS HEAVILY DEPENDENT ON SAVE, AND RETURNSTRINGFORSAVING
         String workoutIdentifier = "workout";
         String cardioIdentifier = "Cardio:";
         String resistanceIdentifier = "Resistance:";
@@ -103,7 +106,7 @@ public class Logbook implements Loadable, Saveable {
                 }
                 this.addWorkout(workout);
             }
-        }
+        }*/
         /*List<String> lines = Files.readAllLines(Paths.get("savefile.text"));   // how come this doesn't work?
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
@@ -148,12 +151,14 @@ public class Logbook implements Loadable, Saveable {
 
         // THIS METHOD IS HEAVILY DEPENDENT ON RETURNSTRINGLIST, LOAD, W.RETURNSTRING() AND OTHERS (?)
 
-        List<String> lines = this.returnStringList();
+       /* List<String> lines = this.returnStringList();
         PrintWriter writer = new PrintWriter("savefile.text", "UTF-8");
         for (String line: lines) {
             writer.println(line);
         }
-        writer.close();
+        writer.close();*/
+
+       saver.save();
 
 
     }
