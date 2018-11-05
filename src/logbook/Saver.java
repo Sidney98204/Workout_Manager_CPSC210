@@ -25,13 +25,10 @@ public class Saver {
         }
         writer.close();
 
-
     }
 
     // EFFECTS: splits up given string by its spaces
     public static ArrayList<String> splitOnSpace(String line) {
-
-        // lack of cohesion here
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));
     }

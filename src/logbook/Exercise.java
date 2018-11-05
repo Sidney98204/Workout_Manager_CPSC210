@@ -18,4 +18,3 @@ public abstract class Exercise {
 
 }
 
-// How should I test the interface? Augmenting implementation class to include tests for interface...?

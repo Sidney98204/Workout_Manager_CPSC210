@@ -10,31 +10,12 @@ public class Workout {
     private String date;
     private ArrayList<Exercise> workout;
 
-    // REQUIRES:
-    // MODIFIES: this
-    // EFFECTS: creates new Workout object with empty list
-    /*public Workout() {
-        //this.name = name;
-        //this.date = date;
 
-        workout = new ArrayList<>();
-
-    }
-*/
     public Workout(String name, String date) {
         this.name = name;
         this.date = date;
         workout = new ArrayList<>();
     }
-
-    /*// EFFECTS: sets name of workout
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }*/
 
     // EFFECTS: returns name
     public String getName() {
@@ -84,7 +65,6 @@ public class Workout {
     // EFFECTS: returns the number of exercises in workout
     public int getSize() {
         return workout.size();
-        // haven't written tests for this method!!!
     }
 
     // REQUIRES:
@@ -98,7 +78,6 @@ public class Workout {
          return e;
 
     }
-    // haven't written tests for this method!!!
 
     //REQUIRES:
     //MODIFIES:
@@ -107,8 +86,6 @@ public class Workout {
         for (Exercise e : workout) {
             System.out.println(e);
         }
-
-
     }
 
     //REQUIRES:
@@ -140,24 +117,8 @@ public class Workout {
             }
 
         }
-
         // Hey, I think this is another spot with coupling, coupling between saving/loading and returnString();
-
         return workoutInfo;
     }
-
-    // EFFECTS: returns list of string with 1st element being workout info
-    //  and the rest being strings of each exercise
-    /*public List<String> returnStringList() {
-        String workoutIdentifier = "workout";
-        List<String> list = new ArrayList<>();
-        list.add(workoutIdentifier+ " " + this.getSize() + " " + this.name + " " + this.date);
-        for (Exercise e: workout) {
-            list.add(e.returnStringForSaving());
-        }
-
-        return list;
-    }*/
-
 
 }

@@ -44,53 +44,14 @@ public class Loader {
                 logbook.addWorkout(workout);
             }
         }
-        /*List<String> lines = Files.readAllLines(Paths.get("savefile.text"));   // how come this doesn't work?
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            ArrayList<String> partsOfLine = splitOnSpace(line);
-            if (partsOfLine.get(0).equals(workoutIdentifier)) {
-                Workout workout = new Workout(partsOfLine.get(2), partsOfLine.get(3));
-                int numberOfExercises = Integer.parseInt(partsOfLine.get(1));         // note exception here
-                for (int j = 0; j < numberOfExercises; j++) {
-                    i++;
-                    line = lines.get(i);
-                    ArrayList<String> partsOfLineForExercise = splitOnSpace(line);
-                    if (partsOfLineForExercise.get(0).equals("Cardio:")) {
-                        workout.addExercise(new CardioExercise(partsOfLine.get(1),
-                                Integer.parseInt(partsOfLine.get(2)), partsOfLine.get(3)));
-                    } else if (partsOfLineForExercise.get(0).equals("Resistance:")) {
-                        workout.addExercise(new ResistanceExercise(partsOfLine.get(1),
-                                Integer.parseInt(partsOfLine.get(2)),
-                                Integer.parseInt(partsOfLine.get(3)),
-                                Integer.parseInt(partsOfLine.get(4))));
-                    }
-                }
-                logbook.addWorkout(workout);
-
-
-            *//*if (partsOfLine.get(0).equals("Cardio:")) {
-                workout.addExercise(new CardioExercise(partsOfLine.get(1),
-                        Integer.parseInt(partsOfLine.get(2)), partsOfLine.get(3)));
-            } else if (partsOfLine.get(0).equals("Resistance:")) {
-                workout.addExercise(new ResistanceExercise(partsOfLine.get(1),
-                        Integer.parseInt(partsOfLine.get(2)),
-                        Integer.parseInt(partsOfLine.get(3)),
-                        Integer.parseInt(partsOfLine.get(4))));*//*
-            }
-
-        }*/
 
 
     }
 
     // EFFECTS: splits up given string by its spaces
     public static ArrayList<String> splitOnSpace(String line) {
-
-        // lack of cohesion here
         String[] splits = line.split(" ");
         return new ArrayList<>(Arrays.asList(splits));
     }
-
-
 
 }
