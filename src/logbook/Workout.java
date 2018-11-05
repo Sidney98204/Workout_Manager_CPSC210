@@ -108,7 +108,7 @@ public class Workout {
             System.out.println(e);
         }
 
-        // tests for print methods...?
+
     }
 
     //REQUIRES:
@@ -119,6 +119,9 @@ public class Workout {
         for (Exercise e: workout) {
             listOfExercises = listOfExercises + e + "\n";
         }
+
+        // HEYYY, I guess this is an area of cohesion, because the implementation
+        // of toString for workout is dependent on the toString implementation of Exercise
 
         return listOfExercises;
     }
@@ -137,6 +140,8 @@ public class Workout {
             }
 
         }
+
+        // Hey, I think this is another spot with coupling, coupling between saving/loading and returnString();
 
         return workoutInfo;
     }
