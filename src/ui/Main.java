@@ -5,6 +5,7 @@ import logbook.CardioExercise;
 import logbook.Exercise;
 import logbook.ResistanceExercise;
 import logbook.Workout;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,40 +48,42 @@ public class Main {
                 sb.append(System.lineSeparator());
             }
 
-            List<String> weatherlines = splitOnComma(sb.toString());
-            PrintWriter writer = new PrintWriter("weatherdata", "UTF-8");
-            for (String l: weatherlines) {
-                writer.println(l);
-            }
-            writer.close();
 
-//            printCityAndCountry(weatherlines.get(23), weatherlines.get(19));
-            printWeatherDescription(weatherlines.get(4));
+
+
+
+
+
+            JSONObject weatherjson = readJsonFromUrl(theURL);
+            JSONArray arr = weatherjson.getJSONArray("weather");
+            String description = "";
+            for (int i = 0; i < arr.length(); i++) {
+                description = arr.getJSONObject(i).getString("description");
+            }
+            System.out.println("Forecast: " + description);
+            int todaysHigh = weatherjson.getJSONObject("main").getInt("temp_max");
+            todaysHigh = todaysHigh - 273;
+            int todaysLow = weatherjson.getJSONObject("main").getInt("temp_min");
+            todaysLow = todaysLow - 273;
+
+            int currentTemp = weatherjson.getJSONObject("main").getInt("temp");
+            currentTemp = currentTemp - 273;
+            System.out.println("Current temperature: " + currentTemp + "\u00B0" + "C, Today's High: " + todaysHigh
+            +" \u00B0" + "C, Today's Low: " + todaysLow + "\u00B0" + "C");
+            System.out.println();
+
+
+
+
+
 
 
             JSONObject json = readJsonFromUrl("https://favqs.com/api/qotd");
-//            System.out.println(json.toString());
-
-//            System.out.println(json.get("quote"));
-            List<String> lines = splitOnComma(json.toString());
-
-            PrintWriter writer2 = new PrintWriter("quotedata", "UTF-8");
-            for (String l: lines) {
-                writer2.println(l);
-            }
-            writer2.close();
-
-            printQuotationAndAuthor(lines.get(7), lines.get(2));
-
-
-
-
-
-            // 4 main, 5 description, 14 wind, country 20, city 24, total 25 lines
-
-
-
-//            System.out.println(sb);
+            String quote = json.getJSONObject("quote").getString("body");
+            System.out.println("\"" + quote + "\"");
+            String author = json.getJSONObject("quote").getString("author");
+            System.out.println("-" + author);
+            System.out.println();
 
 
         } finally {
