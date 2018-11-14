@@ -23,6 +23,7 @@ import java.util.List;
 
 import static logbook.Intensity.LOW;
 import static ui.JsonReader.readJsonFromUrl;
+import javax.swing.SwingUtilities;
 
 
 public class Main {
@@ -93,7 +94,7 @@ public class Main {
             }
         }
         UserInterface ui = new UserInterface();
-        //   SwingUtilities.invokeLater(ui);
+           SwingUtilities.invokeLater(ui);
 
 
         try {

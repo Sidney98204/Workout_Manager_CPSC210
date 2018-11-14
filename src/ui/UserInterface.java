@@ -9,7 +9,9 @@ import logbook.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class UserInterface implements Runnable {
     private JFrame frame;
@@ -113,14 +115,6 @@ public class UserInterface implements Runnable {
             } else if (input.equals("4")) {
                 searchExerciseInLogbook();
 
-
-            } else if (input.equals("p")) {
-                System.out.println("Name of person: ");
-                String name = reader.nextLine();
-                logbook.addObserver(new Person(name));
-
-
-
             } else if (input.equals("x")) {
                 System.out.println("Would you like to save your changes?");
                 input = reader.nextLine();
@@ -155,12 +149,34 @@ public class UserInterface implements Runnable {
         printOption("2", "Remove workout");
         printOption("3", "Search for workout");
         printOption("4", "Search for exercise");
-        printOption("p", "Add a person");
         printOption("x", "Quit");
 
 
         // COUPLINGGG!!!
         // I changed this from simple sout calls to method calls
+
+    }
+
+    public ArrayList<String> getStartingOptionsList() {
+        ArrayList optionsList = new ArrayList<>();
+        optionsList.add("1");
+        optionsList.add("2");
+        optionsList.add("3");
+        optionsList.add("4");
+        optionsList.add("x");
+
+        return optionsList;
+    }
+
+    public ArrayList<String> getStartingInstructionsList() {
+        ArrayList instructionsList = new ArrayList<>();
+        instructionsList.add("Create new workout");
+        instructionsList.add("Remove workout");
+        instructionsList.add("Search for workout");
+        instructionsList.add("Search for exercise");
+        instructionsList.add("Quit");
+
+        return instructionsList;
 
     }
 
@@ -176,6 +192,29 @@ public class UserInterface implements Runnable {
         // abstracted into method
     }
 
+    public ArrayList<String> getWorkoutOptionsList() {
+        ArrayList optionsList = new ArrayList<>();
+        optionsList.add("1");
+        optionsList.add("2");
+        optionsList.add("3");
+        optionsList.add("4");
+        optionsList.add("x");
+
+        return optionsList;
+
+    }
+
+    public ArrayList<String> getWorkoutInstructionsList() {
+        ArrayList instructionsList = new ArrayList<>();
+        instructionsList.add("Add exercise");
+        instructionsList.add("Search for exercise");
+        instructionsList.add("Remove exercise");
+        instructionsList.add("Print workout");
+        instructionsList.add("Quit");
+
+        return instructionsList;
+    }
+
     public void run() {
         frame = new JFrame("Logbook");
         frame.setPreferredSize(new Dimension(1000  ,1000));
@@ -187,6 +226,35 @@ public class UserInterface implements Runnable {
     }
 
     public void createComponents(Container container) {
+        GridLayout layout = new GridLayout(3,3);
+        container.setLayout(layout);
+        JLabel jlabel1 = new JLabel("");
+        JLabel jlabel2 = new JLabel("");
+        JLabel jlabel3 = new JLabel("");
+        JLabel jlabel4 = new JLabel("");
+        JLabel jlabel5 = new JLabel("");
+        JLabel jlabel6 = new JLabel("");
+        JLabel jlabel7 = new JLabel("");
+        JLabel jlabel8 = new JLabel("");
+        JLabel jlabel9 = new JLabel("");
+        container.add(jlabel1);
+        container.add(jlabel2);
+        container.add(jlabel3);
+        container.add(jlabel4);
+
+
+        JTextArea options = new JTextArea(returnOptionString(getStartingOptionsList(),getStartingInstructionsList()));
+        container.add(options);
+
+        container.add(jlabel6);
+        JTextArea input = new JTextArea("");
+        container.add(input);
+        container.add(jlabel8);
+        JButton button = new JButton("Enter");
+        button.addActionListener(new LogbookListener(logbook, input ));
+        container.add(button);
+
+
 
     }
 
@@ -299,6 +367,15 @@ public class UserInterface implements Runnable {
         System.out.println("[" + option + "] " + instruction);
 
         // i abstracted into a method for the printFunctionalities
+    }
+
+    public String returnOptionString(ArrayList<String> options, ArrayList<String> instructions) {
+        String listOfOptions = "";
+        for (int i = 0; i < options.size(); i++) {
+            listOfOptions += "[" + options.get(i) + "] " + instructions.get(i) + "\n";
+        }
+
+        return listOfOptions;
     }
 
 
