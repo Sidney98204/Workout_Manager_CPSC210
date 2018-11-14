@@ -57,13 +57,13 @@ public class UserInterface implements Runnable {
                         if (input.equals("r")) {
                             try {
                                 addResistanceExerciseToWorkout(workout);
-                            } catch(NumberFormatException e) {
+                            } catch (NumberFormatException e) {
                                 System.out.println("Invalid entry");
-                            } catch(TooHeavyException e) {
+                            } catch (TooHeavyException e) {
                                 System.out.println("That's too heavy!");
-                            } catch(TooManySetsException e) {
+                            } catch (TooManySetsException e) {
                                 System.out.println("That's too many sets!");
-                            } catch(TooManyRepsException e) {
+                            } catch (TooManyRepsException e) {
                                 System.out.println("That's too many reps!");
                             }
 
@@ -71,10 +71,10 @@ public class UserInterface implements Runnable {
                         } else if (input.equals("c")) {
                             try {
                                 addCardioExerciseToWorkout(workout);
-                            } catch(TooMuchTimeException e) {
+                            } catch (TooMuchTimeException e) {
                                 System.out.println("That's for too long!");
 
-                            } catch(NumberFormatException e) {
+                            } catch (NumberFormatException e) {
                                 System.out.println("Invalid entry");
 
                             }
@@ -103,19 +103,22 @@ public class UserInterface implements Runnable {
                 }
 
 
-
-
             } else if (input.equals("2")) {
                 removeWorkoutFromLogbook();
 
-            }
-            else if (input.equals("3")) {
+            } else if (input.equals("3")) {
                 searchForWorkoutInLogbook();
-
 
 
             } else if (input.equals("4")) {
                 searchExerciseInLogbook();
+
+
+            } else if (input.equals("p")) {
+                System.out.println("Name of person: ");
+                String name = reader.nextLine();
+                logbook.addObserver(new Person(name));
+
 
 
             } else if (input.equals("x")) {
@@ -152,6 +155,7 @@ public class UserInterface implements Runnable {
         printOption("2", "Remove workout");
         printOption("3", "Search for workout");
         printOption("4", "Search for exercise");
+        printOption("p", "Add a person");
         printOption("x", "Quit");
 
 

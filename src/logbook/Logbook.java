@@ -3,15 +3,13 @@ package logbook;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-public class Logbook {
+public class Logbook extends Observable {
     private ArrayList<Workout> logbook;
     private Loader loader;
     private Saver saver;
+
 
     // EFFECTS: creates new logbook object with empty list
     public Logbook() {
@@ -40,6 +38,8 @@ public class Logbook {
     // EFFECTS: adds workout to the end of the list of logbook
     public void addWorkout(Workout workout) {
         logbook.add(workout);
+        setChanged();
+        this.notifyObservers(workout);
     }
 
     // MODIFIES: this
@@ -83,5 +83,7 @@ public class Logbook {
         // THIS METHOD IS HEAVILY DEPENDENT ON RETURNSTRINGLIST, LOAD, W.RETURNSTRING() AND OTHERS (?)
         saver.save();
     }
+
+
 
 }

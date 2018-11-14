@@ -4,11 +4,14 @@ package logbook;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 public class Workout {
     private String name;
     private String date;
     private ArrayList<Exercise> workout;
+
 
 
     public Workout(String name, String date) {
@@ -91,16 +94,20 @@ public class Workout {
     //REQUIRES:
     //MODIFIES:
     //EFFECTS: returns the string representation of a workout
+//    public String toString() {
+//        String listOfExercises = "";
+//        for (Exercise e: workout) {
+//            listOfExercises = listOfExercises + e + "\n";
+//        }
+//
+//        // HEYYY, I guess this is an area of cohesion, because the implementation
+//        // of toString for workout is dependent on the toString implementation of Exercise
+//
+//        return listOfExercises;
+//    }
+
     public String toString() {
-        String listOfExercises = "";
-        for (Exercise e: workout) {
-            listOfExercises = listOfExercises + e + "\n";
-        }
-
-        // HEYYY, I guess this is an area of cohesion, because the implementation
-        // of toString for workout is dependent on the toString implementation of Exercise
-
-        return listOfExercises;
+        return name;
     }
 
     // EFFECTS: return string containing workout information

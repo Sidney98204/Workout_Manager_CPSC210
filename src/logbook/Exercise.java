@@ -1,5 +1,7 @@
 package logbook;
 
+import java.util.Observer;
+
 public abstract class Exercise {
     protected String name;
 
