@@ -255,6 +255,8 @@ public class UserInterface implements Runnable {
 //        button.addActionListener(new LogbookListener(logbook, input, options ));
 //        container.add(button);
 
+        frame.setLayout(new BorderLayout());
+
         panel1 = new JPanel();
         panel2 = new JPanel();
         JTextArea a1 = new JTextArea("This is panel 1");
