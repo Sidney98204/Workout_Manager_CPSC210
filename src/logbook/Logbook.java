@@ -38,8 +38,7 @@ public class Logbook extends Observable {
     // EFFECTS: adds workout to the end of the list of logbook
     public void addWorkout(Workout workout) {
         logbook.add(workout);
-        setChanged();
-        this.notifyObservers(workout);
+
     }
 
     // MODIFIES: this

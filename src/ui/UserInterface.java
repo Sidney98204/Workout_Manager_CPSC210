@@ -17,6 +17,7 @@ public class UserInterface implements Runnable {
     private JFrame frame;
     private Scanner reader;
     private Logbook logbook;
+    private JPanel panel1,panel2,panel3,panel4;
 
     public static final int MAX_WEIGHT = 1000;
     public static final int MAX_SETS = 20;
@@ -163,7 +164,7 @@ public class UserInterface implements Runnable {
         optionsList.add("2");
         optionsList.add("3");
         optionsList.add("4");
-        optionsList.add("x");
+        optionsList.add("5");
 
         return optionsList;
     }
@@ -181,11 +182,11 @@ public class UserInterface implements Runnable {
     }
 
     public void printWorkoutFunctionalities() {
-        printOption("1", "Add exercise");
-        printOption("2", "Search for exercise");
-        printOption("3", "Remove exercise");
-        printOption("4", "Print workout");
-        printOption("x", "Done");
+        printOption("6", "Add exercise");
+        printOption("7", "Search for exercise");
+        printOption("8", "Remove exercise");
+        printOption("9", "Print workout");
+        printOption("10", "Done");
 
 
         // COUPLINGGGGGGG!!!!!
@@ -194,11 +195,11 @@ public class UserInterface implements Runnable {
 
     public ArrayList<String> getWorkoutOptionsList() {
         ArrayList optionsList = new ArrayList<>();
-        optionsList.add("1");
-        optionsList.add("2");
-        optionsList.add("3");
-        optionsList.add("4");
-        optionsList.add("x");
+        optionsList.add("6");
+        optionsList.add("7");
+        optionsList.add("8");
+        optionsList.add("9");
+        optionsList.add("10");
 
         return optionsList;
 
@@ -226,33 +227,49 @@ public class UserInterface implements Runnable {
     }
 
     public void createComponents(Container container) {
-        GridLayout layout = new GridLayout(3,3);
-        container.setLayout(layout);
-        JLabel jlabel1 = new JLabel("");
-        JLabel jlabel2 = new JLabel("");
-        JLabel jlabel3 = new JLabel("");
-        JLabel jlabel4 = new JLabel("");
-        JLabel jlabel5 = new JLabel("");
-        JLabel jlabel6 = new JLabel("");
-        JLabel jlabel7 = new JLabel("");
-        JLabel jlabel8 = new JLabel("");
-        JLabel jlabel9 = new JLabel("");
-        container.add(jlabel1);
-        container.add(jlabel2);
-        container.add(jlabel3);
-        container.add(jlabel4);
+//        GridLayout layout = new GridLayout(3,3);
+//        container.setLayout(layout);
+//        JLabel jlabel1 = new JLabel("");
+//        JLabel jlabel2 = new JLabel("");
+//        JLabel jlabel3 = new JLabel("");
+//        JLabel jlabel4 = new JLabel("");
+//        JLabel jlabel5 = new JLabel("");
+//        JLabel jlabel6 = new JLabel("");
+//        JLabel jlabel7 = new JLabel("");
+//        JLabel jlabel8 = new JLabel("");
+//        JLabel jlabel9 = new JLabel("");
+//        container.add(jlabel1);
+//        container.add(jlabel2);
+//        container.add(jlabel3);
+//        container.add(jlabel4);
+//
+//
+//        JTextArea options = new JTextArea(returnOptionString(getStartingOptionsList(),getStartingInstructionsList()));
+//        container.add(options);
+//
+//        container.add(jlabel6);
+//        JTextArea input = new JTextArea("");
+//        container.add(input);
+//        container.add(jlabel8);
+//        JButton button = new JButton("Enter");
+//        button.addActionListener(new LogbookListener(logbook, input, options ));
+//        container.add(button);
+
+        panel1 = new JPanel();
+        panel2 = new JPanel();
+        JTextArea a1 = new JTextArea("This is panel 1");
+        JTextArea a2 = new JTextArea("This is panel 2");
+        JButton j1 = new JButton("Push me to go to panel 2");
+        JButton j2 = new JButton("Push me to go to panel 1");
+        j1.addActionListener(new JustAnActionListener(frame,panel1,panel2,j1,j2));
+        j2.addActionListener(new JustAnActionListener(frame,panel1,panel2,j1,j2));
+        panel1.add(a1);
+        panel2.add(a2);
+        panel1.add(j1);
+        panel2.add(j2);
+        frame.setContentPane(panel1);
 
 
-        JTextArea options = new JTextArea(returnOptionString(getStartingOptionsList(),getStartingInstructionsList()));
-        container.add(options);
-
-        container.add(jlabel6);
-        JTextArea input = new JTextArea("");
-        container.add(input);
-        container.add(jlabel8);
-        JButton button = new JButton("Enter");
-        button.addActionListener(new LogbookListener(logbook, input ));
-        container.add(button);
 
 
 
