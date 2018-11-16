@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 public class DisplayHandler implements ActionListener {
     private Logbook logbook;
     private JFrame frame;
-    private JPanel startPanel, optionsPanelInStart, workoutPanel,
+    private JPanel startPanel, optionsPanelInStart, workoutPanel, optionsPanelInWorkout,
             nameAndDate, rvcPanel, resPanel, cardioPanel, searchPanel;
     private JButton createNewWorkout, removeWorkout, searchForWorkout,searchForExercise, quit,
     addExercise, searchForExerciseInWorkout, removeExercise, printWorkout, done,
@@ -78,7 +78,39 @@ public class DisplayHandler implements ActionListener {
         nameAndDate.add(new JLabel());
         nameAndDate.add(createWorkout);
 
-        
+        workoutPanel = new JPanel();               // workout panel
+        workoutPanel.setLayout(new BorderLayout());
+        workoutPanel.add(logbookHeader, BorderLayout.NORTH);
+
+        optionsPanelInWorkout = new JPanel();                      // options panel in workout making buttons
+        optionsPanelInWorkout.setLayout(new CardLayout());
+        addExercise = new JButton("Add exercise");
+        removeExercise = new JButton("Remove exercise");
+        searchForExerciseInWorkout = new JButton("Search for exercise in workout");
+        printWorkout = new JButton("Print workout");
+        done = new JButton("Done");
+
+        addExercise.addActionListener(this);            // adding listeners to each button
+        removeExercise.addActionListener(this);
+        searchForExerciseInWorkout.addActionListener(this);
+        printWorkout.addActionListener(this);
+        done.addActionListener(this);
+
+        optionsPanelInWorkout.add(addExercise);          // adding each button to panel
+        optionsPanelInWorkout.add(removeExercise);
+        optionsPanelInWorkout.add(searchForExerciseInWorkout);
+        optionsPanelInWorkout.add(printWorkout);
+        optionsPanelInWorkout.add(done);
+
+        workoutPanel.add(optionsPanelInWorkout, BorderLayout.CENTER);  // added options panel to workout panel
+
+
+
+
+
+
+
+
 
 
 
