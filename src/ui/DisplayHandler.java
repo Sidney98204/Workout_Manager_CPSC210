@@ -7,6 +7,7 @@ import logbook.Workout;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,14 +16,15 @@ public class DisplayHandler implements ActionListener {
     private Logbook logbook;
     private JFrame frame;
     private JPanel startPanel, optionsPanelInStart, workoutPanel, optionsPanelInWorkout,
-            nameAndDate, rvcPanel, resPanel, cardioPanel, searchPanel;
+            nameAndDate, rvcPanel, resPanel, cardioPanel, searchPanel, displayPanel;
     private JButton createNewWorkout, removeWorkout, searchForWorkout,searchForExercise, quit,
-    addExercise, searchForExerciseInWorkout, removeExercise, printWorkout, done,
-            r, c, addResistanceExercise, addCardioExercise, createWorkout;
+    addExercise, searchForExerciseInWorkout, removeExercise, printWorkout, done, search,
+            r, c, addResistanceExercise, addCardioExercise, createWorkout, back;
     private JLabel logbookHeader, logbookHeader2, bottomDisplay, name, date, name2, weight, reps, sets,
-    name3, duration, intensity;
+    name3, duration, intensity, name4;
     private JTextArea inputName, inputDate, inputName2, inputWeight, inputSets, inputReps,
-            inputName3, inputDuration, inputIntensity;
+            inputName3, inputDuration, inputIntensity, inputName4, display;
+    private Workout currentWorkout;
 
     public DisplayHandler(Logbook logbook) {
         this.logbook = logbook;
@@ -187,6 +189,33 @@ public class DisplayHandler implements ActionListener {
 
 
 
+        searchPanel = new JPanel();
+        searchPanel.setLayout(new GridLayout(2,2));
+        name4 = new JLabel("Name: ");
+        inputName4 = new JTextArea();
+        search = new JButton("Search");
+        search.addActionListener(this);
+        searchPanel.add(name4);
+        searchPanel.add(inputName4);
+        searchPanel.add(new JLabel());
+        searchPanel.add(search);
+
+
+        displayPanel = new JPanel();
+        display = new JTextArea();
+        back = new JButton("Back");
+        back.addActionListener(this);
+        displayPanel.add(display, BorderLayout.CENTER);
+        displayPanel.add(back, BorderLayout.SOUTH);
+
+
+
+
+
+
+
+
+
 
 
 
@@ -262,6 +291,22 @@ public class DisplayHandler implements ActionListener {
 
             clearInputs(inputs);
             removeAndSet(cardioPanel, workoutPanel);
+        } else if (e.getActionCommand().equals("Search for workout")) {
+            removeAndSet(startPanel, searchPanel);
+
+
+        } else if (e.getActionCommand().equals("Search")) {
+            removeAndSet(searchPanel, displayPanel);
+            ArrayList<JTextArea> inputs = new ArrayList<>();
+            inputs.add(inputName4);
+            Workout workout = logbook.searchWorkout(inputName4.getText());
+            setWorkout(workout);
+            clearInputs(inputs);
+            display.setText(currentWorkout.toString());
+        } else if (e.getActionCommand().equals("Done")) {
+            removeAndSet(workoutPanel, startPanel);
+        } else if (e.getActionCommand().equals("Back")) {
+            removeAndSet(displayPanel, startPanel);
         }
 
         frame.validate();
@@ -278,5 +323,13 @@ public class DisplayHandler implements ActionListener {
         for (JTextArea text: inputs) {
             text.setText("");
         }
+    }
+
+    public void setWorkout(Workout workout) {
+        this.currentWorkout = workout;
+    }
+
+    public void fillInGridLayout() {
+
     }
 }

@@ -94,21 +94,19 @@ public class Workout {
     //REQUIRES:
     //MODIFIES:
     //EFFECTS: returns the string representation of a workout
-//    public String toString() {
-//        String listOfExercises = "";
-//        for (Exercise e: workout) {
-//            listOfExercises = listOfExercises + e + "\n";
-//        }
-//
-//        // HEYYY, I guess this is an area of cohesion, because the implementation
-//        // of toString for workout is dependent on the toString implementation of Exercise
-//
-//        return listOfExercises;
-//    }
-
     public String toString() {
-        return name;
+        String listOfExercises = "";
+        for (Exercise e: workout) {
+            listOfExercises = listOfExercises + e + "\n";
+        }
+
+        // HEYYY, I guess this is an area of cohesion, because the implementation
+        // of toString for workout is dependent on the toString implementation of Exercise
+
+        return listOfExercises;
     }
+
+
 
     // EFFECTS: return string containing workout information
     public String returnString() {
