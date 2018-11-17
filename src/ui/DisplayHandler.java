@@ -15,17 +15,20 @@ public class DisplayHandler implements ActionListener {
     private Logbook logbook;
     private JFrame frame;
     private JPanel startPanel, optionsPanelInStart, workoutPanel, optionsPanelInWorkout,
-            nameAndDate, rvcPanel, resPanel, cardioPanel, searchPanel, displayPanel, removePanel, searchForExercisePanel;
+            nameAndDate, rvcPanel, resPanel, cardioPanel, searchPanel, displayPanel, removeWorkoutPanel,
+            searchForExercisePanel, removeExercisePanel, workoutDisplayPanel;
     private JButton createNewWorkout, removeWorkout, searchForWorkout,searchForExercise, quit,
-    addExercise, searchForExerciseInWorkout, removeExercise, printWorkout, done, search,
-            r, c, addResistanceExercise, addCardioExercise, createWorkout, back, removeButton, searchExerciseButton;
+    addExercise, removeExercise, printWorkout, done, search,
+            r, c, addResistanceExercise, addCardioExercise, createWorkout, back, removeWorkoutButton,
+            searchExerciseButton, removeExerciseButton, returnToWorkout;
     private JLabel logbookHeader, logbookHeader2, bottomDisplay, name, date, name2, weight, reps, sets,
-    name3, duration, intensity, name4, removeName, searchExerciseByName;
+    name3, duration, intensity, name4, removeWorkoutName, searchExerciseByName, removeExerciseName;
     private JTextArea inputName, inputDate, inputName2, inputWeight, inputSets, inputReps,
-            inputName3, inputDuration, inputIntensity, inputName4, display, removeNameInput, searchExerciseByNameInput;
+            inputName3, inputDuration, inputIntensity, inputName4, display, removeWorkoutNameInput,
+            searchExerciseByNameInput, removeExerciseNameInput, workoutDisplay;
     private Workout currentWorkout;
 
-    // Things that remain: Robustness, Prompt user if they wish to save changes panel, Print workout and remove exercise in workout panel, and then I guess aesthetics and adding forecast and quote to the startPanel
+    // Things that remain: Robustness, and then I guess aesthetics and adding forecast and quote to the startPanel
 
     public DisplayHandler(Logbook logbook) {
         this.logbook = logbook;
@@ -111,19 +114,19 @@ public class DisplayHandler implements ActionListener {
         optionsPanelInWorkout.setLayout(new FlowLayout());
         addExercise = new JButton("Add exercise");
         removeExercise = new JButton("Remove exercise");
-        searchForExerciseInWorkout = new JButton("Search for exercise in workout");
+
         printWorkout = new JButton("Print workout");
         done = new JButton("Done");
 
         addExercise.addActionListener(this);            // adding listeners to each button
         removeExercise.addActionListener(this);
-        searchForExerciseInWorkout.addActionListener(this);
+
         printWorkout.addActionListener(this);
         done.addActionListener(this);
 
         optionsPanelInWorkout.add(addExercise);          // adding each button to panel
         optionsPanelInWorkout.add(removeExercise);
-        optionsPanelInWorkout.add(searchForExerciseInWorkout);   // eh do i really want this
+
         optionsPanelInWorkout.add(printWorkout);
         optionsPanelInWorkout.add(done);
 
@@ -215,16 +218,16 @@ public class DisplayHandler implements ActionListener {
         displayPanel.add(back, BorderLayout.SOUTH);
 
 
-        removePanel = new JPanel();
-        removePanel.setLayout(new GridLayout(2,2));
-        removeName = new JLabel("Name: ");
-        removeNameInput = new JTextArea();
-        removeButton = new JButton("Remove");
-        removeButton.addActionListener(this);
-        removePanel.add(removeName);
-        removePanel.add(removeNameInput);
-        removePanel.add(new JLabel());
-        removePanel.add(removeButton);
+        removeWorkoutPanel = new JPanel();
+        removeWorkoutPanel.setLayout(new GridLayout(2,2));
+        removeWorkoutName = new JLabel("Name: ");
+        removeWorkoutNameInput = new JTextArea();
+        removeWorkoutButton = new JButton("Remove workout");
+        removeWorkoutButton.addActionListener(this);
+        removeWorkoutPanel.add(removeWorkoutName);
+        removeWorkoutPanel.add(removeWorkoutNameInput);
+        removeWorkoutPanel.add(new JLabel());
+        removeWorkoutPanel.add(removeWorkoutButton);
 
         searchForExercisePanel = new JPanel();
         searchForExercisePanel.setLayout(new GridLayout(2,2));
@@ -236,6 +239,26 @@ public class DisplayHandler implements ActionListener {
         searchForExercisePanel.add(searchExerciseByNameInput);
         searchForExercisePanel.add(new JLabel());
         searchForExercisePanel.add(searchExerciseButton);
+
+
+        removeExercisePanel = new JPanel();
+        removeExercisePanel.setLayout(new GridLayout(2,2));
+        removeExerciseName = new JLabel("Name: ");
+        removeExerciseNameInput = new JTextArea();
+        removeExerciseButton = new JButton("Remove this exercise");
+        removeExerciseButton.addActionListener(this);
+        removeExercisePanel.add(removeExerciseName);
+        removeExercisePanel.add(removeExerciseNameInput);
+        removeExercisePanel.add(new JLabel());
+        removeExercisePanel.add(removeExerciseButton);
+
+        workoutDisplayPanel = new JPanel();
+        workoutDisplay = new JTextArea();
+        returnToWorkout = new JButton("Return to workout");
+        returnToWorkout.addActionListener(this);
+        workoutDisplayPanel.add(workoutDisplay, BorderLayout.CENTER);
+        workoutDisplayPanel.add(returnToWorkout, BorderLayout.SOUTH);
+
 
 
 
@@ -291,6 +314,7 @@ public class DisplayHandler implements ActionListener {
             logbook.addWorkout(workout);
             clearInputs(inputs);
             removeAndSet(nameAndDate, workoutPanel);
+            currentWorkout = workout;
         } else if (e.getActionCommand().equals("Add exercise")) {
             removeAndSet(workoutPanel, rvcPanel);
 
@@ -305,8 +329,8 @@ public class DisplayHandler implements ActionListener {
             inputs.add(inputSets);
             inputs.add(inputReps);
 
-            Workout workout = logbook.getLogbook().get(logbook.getSize()-1);
-            workout.addExercise(new ResistanceExercise(inputName2.getText(),
+            currentWorkout = logbook.getLogbook().get(logbook.getSize()-1);
+            currentWorkout.addExercise(new ResistanceExercise(inputName2.getText(),
                     Integer.parseInt(inputWeight.getText()), Integer.parseInt(inputSets.getText()),
                     Integer.parseInt(inputReps.getText())));   // HAVE TO DEAL WITH EXCEPTIONS
 
@@ -319,8 +343,8 @@ public class DisplayHandler implements ActionListener {
             inputs.add(inputIntensity);
 
 
-            Workout workout = logbook.getLogbook().get(logbook.getSize()-1);
-            workout.addExercise(new CardioExercise(inputName3.getText(), Integer.parseInt(inputDuration.getText()),
+            currentWorkout = logbook.getLogbook().get(logbook.getSize()-1);
+            currentWorkout.addExercise(new CardioExercise(inputName3.getText(), Integer.parseInt(inputDuration.getText()),
                     inputIntensity.getText()));           //  HAVE TO DEAL WITH EXCEPTIONS
 
             clearInputs(inputs);
@@ -343,15 +367,15 @@ public class DisplayHandler implements ActionListener {
             removeAndSet(displayPanel, startPanel);
 
         } else if (e.getActionCommand().equals("Remove workout")) {
-            removeAndSet(startPanel, removePanel);
+            removeAndSet(startPanel, removeWorkoutPanel);
         } else if (e.getActionCommand().equals("Remove")) {
             ArrayList<JTextArea> inputs = new ArrayList<>();
-            inputs.add(removeNameInput);
+            inputs.add(removeWorkoutNameInput);
             inputs.add(display);
-            Workout workout = logbook.searchWorkout(removeNameInput.getText());
+            Workout workout = logbook.searchWorkout(removeWorkoutNameInput.getText());
             logbook.removeWorkout(workout);
             clearInputs(inputs);
-            removeAndSet(removePanel, startPanel);
+            removeAndSet(removeWorkoutPanel, startPanel);
 
         } else if (e.getActionCommand().equals("Search for exercise")) {
             removeAndSet(startPanel, searchForExercisePanel);
@@ -371,7 +395,25 @@ public class DisplayHandler implements ActionListener {
                 logbook.save();
             } catch(Exception exception) {
                 System.out.println("Save was unsuccessful");
+
+
+            } finally {
+                System.exit(0);
             }
+        } else if (e.getActionCommand().equals("Remove exercise")) {
+            removeAndSet(workoutPanel, removeExercisePanel);
+        } else if (e.getActionCommand().equals("Remove this exercise")) {
+            currentWorkout.removeExercise(removeExerciseNameInput.getText());
+            removeAndSet(removeExercisePanel,workoutPanel);
+        } else if (e.getActionCommand().equals("Print workout")) {
+            removeAndSet(workoutPanel, workoutDisplayPanel);
+            workoutDisplay.setText(currentWorkout.toString());
+
+        } else if (e.getActionCommand().equals("Return to workout")) {
+            ArrayList<JTextArea> inputs = new ArrayList<>();
+            inputs.add(workoutDisplay);
+            removeAndSet(workoutDisplayPanel, workoutPanel);
+            clearInputs(inputs);
         }
 
         frame.validate();

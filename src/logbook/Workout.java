@@ -63,6 +63,12 @@ public class Workout {
         // not correspond to the right one in the list if there are duplicates
     }
 
+    public void removeExercise(String name) {
+        Exercise e = searchExercise(name);
+        removeExercise(e);
+
+    }
+
     // REQUIRES:
     // MODIFIES:
     // EFFECTS: returns the number of exercises in workout
