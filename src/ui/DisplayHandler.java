@@ -25,13 +25,12 @@ public class DisplayHandler implements ActionListener {
             inputName3, inputDuration, inputIntensity, inputName4, display, removeNameInput, searchExerciseByNameInput;
     private Workout currentWorkout;
 
+    // Things that remain: Robustness, Prompt user if they wish to save changes panel, Print workout and remove exercise in workout panel, and then I guess aesthetics and adding forecast and quote to the startPanel
+
     public DisplayHandler(Logbook logbook) {
         this.logbook = logbook;
         try {
             logbook.load();
-//            PrintWriter pw = new PrintWriter("savefile.text");
-//            pw.print("");
-//            pw.close();
         } catch(Exception e) {
             bottomDisplay.setText("Unable to load file");
         }
@@ -398,4 +397,5 @@ public class DisplayHandler implements ActionListener {
     public void fillInGridLayout() {
 
     }
+
 }
