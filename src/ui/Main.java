@@ -97,11 +97,11 @@ public class Main {
            SwingUtilities.invokeLater(ui);
 
 
-        try {
-            ui.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            ui.start();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
     }

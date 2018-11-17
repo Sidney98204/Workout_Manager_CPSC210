@@ -1,9 +1,8 @@
 package ui;
 
-import logbook.CardioExercise;
-import logbook.Logbook;
-import logbook.ResistanceExercise;
-import logbook.Workout;
+import logbook.*;
+
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -16,18 +15,26 @@ public class DisplayHandler implements ActionListener {
     private Logbook logbook;
     private JFrame frame;
     private JPanel startPanel, optionsPanelInStart, workoutPanel, optionsPanelInWorkout,
-            nameAndDate, rvcPanel, resPanel, cardioPanel, searchPanel, displayPanel;
+            nameAndDate, rvcPanel, resPanel, cardioPanel, searchPanel, displayPanel, removePanel, searchForExercisePanel;
     private JButton createNewWorkout, removeWorkout, searchForWorkout,searchForExercise, quit,
     addExercise, searchForExerciseInWorkout, removeExercise, printWorkout, done, search,
-            r, c, addResistanceExercise, addCardioExercise, createWorkout, back;
+            r, c, addResistanceExercise, addCardioExercise, createWorkout, back, removeButton, searchExerciseButton;
     private JLabel logbookHeader, logbookHeader2, bottomDisplay, name, date, name2, weight, reps, sets,
-    name3, duration, intensity, name4;
+    name3, duration, intensity, name4, removeName, searchExerciseByName;
     private JTextArea inputName, inputDate, inputName2, inputWeight, inputSets, inputReps,
-            inputName3, inputDuration, inputIntensity, inputName4, display;
+            inputName3, inputDuration, inputIntensity, inputName4, display, removeNameInput, searchExerciseByNameInput;
     private Workout currentWorkout;
 
     public DisplayHandler(Logbook logbook) {
         this.logbook = logbook;
+        try {
+            logbook.load();
+//            PrintWriter pw = new PrintWriter("savefile.text");
+//            pw.print("");
+//            pw.close();
+        } catch(Exception e) {
+            bottomDisplay.setText("Unable to load file");
+        }
 
         frame = new JFrame("Logbook");
         frame.setPreferredSize(new Dimension(500  ,500));
@@ -209,6 +216,31 @@ public class DisplayHandler implements ActionListener {
         displayPanel.add(back, BorderLayout.SOUTH);
 
 
+        removePanel = new JPanel();
+        removePanel.setLayout(new GridLayout(2,2));
+        removeName = new JLabel("Name: ");
+        removeNameInput = new JTextArea();
+        removeButton = new JButton("Remove");
+        removeButton.addActionListener(this);
+        removePanel.add(removeName);
+        removePanel.add(removeNameInput);
+        removePanel.add(new JLabel());
+        removePanel.add(removeButton);
+
+        searchForExercisePanel = new JPanel();
+        searchForExercisePanel.setLayout(new GridLayout(2,2));
+        searchExerciseByName = new JLabel("Name of exercise: ");
+        searchExerciseByNameInput = new JTextArea();
+        searchExerciseButton = new JButton("Search exercise");
+        searchExerciseButton.addActionListener(this);
+        searchForExercisePanel.add(searchExerciseByName);
+        searchForExercisePanel.add(searchExerciseByNameInput);
+        searchForExercisePanel.add(new JLabel());
+        searchForExercisePanel.add(searchExerciseButton);
+
+
+
+
 
 
 
@@ -253,10 +285,13 @@ public class DisplayHandler implements ActionListener {
             frame.remove(startPanel);
             frame.setContentPane(nameAndDate);
         } else if (e.getActionCommand().equals("Create workout")) {
+            ArrayList<JTextArea> inputs = new ArrayList<>();
+            inputs.add(inputName);
+            inputs.add(inputDate);
             Workout workout = new Workout(inputName.getText(), inputDate.getText());
             logbook.addWorkout(workout);
+            clearInputs(inputs);
             removeAndSet(nameAndDate, workoutPanel);
-
         } else if (e.getActionCommand().equals("Add exercise")) {
             removeAndSet(workoutPanel, rvcPanel);
 
@@ -307,6 +342,37 @@ public class DisplayHandler implements ActionListener {
             removeAndSet(workoutPanel, startPanel);
         } else if (e.getActionCommand().equals("Back")) {
             removeAndSet(displayPanel, startPanel);
+
+        } else if (e.getActionCommand().equals("Remove workout")) {
+            removeAndSet(startPanel, removePanel);
+        } else if (e.getActionCommand().equals("Remove")) {
+            ArrayList<JTextArea> inputs = new ArrayList<>();
+            inputs.add(removeNameInput);
+            inputs.add(display);
+            Workout workout = logbook.searchWorkout(removeNameInput.getText());
+            logbook.removeWorkout(workout);
+            clearInputs(inputs);
+            removeAndSet(removePanel, startPanel);
+
+        } else if (e.getActionCommand().equals("Search for exercise")) {
+            removeAndSet(startPanel, searchForExercisePanel);
+
+        } else if (e.getActionCommand().equals("Search exercise")) {
+            Exercise exercise = logbook.searchForExercise(searchExerciseByNameInput.getText());
+            ArrayList<JTextArea> inputs = new ArrayList<>();
+            inputs.add(searchExerciseByNameInput);
+            inputs.add(display);
+            clearInputs(inputs);
+            inputs.add(searchExerciseByNameInput);
+            removeAndSet(searchForExercisePanel, displayPanel);
+            display.setText(exercise.toString());
+
+        } else if (e.getActionCommand().equals("Quit")) {
+            try {
+                logbook.save();
+            } catch(Exception exception) {
+                System.out.println("Save was unsuccessful");
+            }
         }
 
         frame.validate();

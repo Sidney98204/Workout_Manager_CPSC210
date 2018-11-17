@@ -60,6 +60,14 @@ public class Logbook extends Observable {
         return workout;
     }
 
+    public Exercise searchForExercise(String name) {
+        Exercise e = null;
+        for (Workout w: logbook) {
+            e = w.searchExercise(name);
+        }
+        return e;
+    }
+
     // EFFECTS: returns list of string representations of workouts in logbook
     public List<String> returnStringList() {
         List<String> list = new ArrayList<>();
