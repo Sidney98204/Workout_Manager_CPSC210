@@ -345,17 +345,27 @@ public class DisplayHandler implements ActionListener {
 
 
         } else if (e.getActionCommand().equals("Search")) {
-            removeAndSet(searchPanel, displayPanel);
             ArrayList<JTextArea> inputs = new ArrayList<>();
             inputs.add(inputName4);
             Workout workout = logbook.searchWorkout(inputName4.getText());
-            setWorkout(workout);
-            clearInputs(inputs);
-            display.setText(currentWorkout.toString());
+            if (workout == null) {
+
+                removeAndSet(searchPanel, startPanel);
+                bottomDisplay.setText(inputName4.getText() + " was not found");
+                clearInputs(inputs);
+            } else {
+                setWorkout(workout);
+                clearInputs(inputs);
+                display.setText(currentWorkout.toString());
+                removeAndSet(searchPanel, displayPanel);
+            }
+
         } else if (e.getActionCommand().equals("Done")) {
             removeAndSet(workoutPanel, startPanel);
+            clearDisplay();
         } else if (e.getActionCommand().equals("Back")) {
             removeAndSet(displayPanel, startPanel);
+            clearDisplay();
 
         } else if (e.getActionCommand().equals("Remove workout")) {
             removeAndSet(startPanel, removeWorkoutPanel);
@@ -364,9 +374,16 @@ public class DisplayHandler implements ActionListener {
             inputs.add(removeWorkoutNameInput);
             inputs.add(display);
             Workout workout = logbook.searchWorkout(removeWorkoutNameInput.getText());
-            logbook.removeWorkout(workout);
-            clearInputs(inputs);
-            removeAndSet(removeWorkoutPanel, startPanel);
+            if (workout == null) {
+                bottomDisplay.setText(removeWorkoutNameInput.getText() + " is not in logbook");
+                removeAndSet(removeWorkoutPanel, startPanel);
+            } else {
+                logbook.removeWorkout(workout);
+                clearInputs(inputs);
+                removeAndSet(removeWorkoutPanel, startPanel);
+                bottomDisplay.setText(removeWorkoutNameInput.getText() + " was removed successfully");
+            }
+
 
         } else if (e.getActionCommand().equals("Search for exercise")) {
             removeAndSet(startPanel, searchForExercisePanel);
@@ -376,10 +393,17 @@ public class DisplayHandler implements ActionListener {
             ArrayList<JTextArea> inputs = new ArrayList<>();
             inputs.add(searchExerciseByNameInput);
             inputs.add(display);
-            clearInputs(inputs);
+
             inputs.add(searchExerciseByNameInput);
-            removeAndSet(searchForExercisePanel, displayPanel);
-            display.setText(exercise.toString());
+            if (exercise == null) {
+                removeAndSet(searchForExercisePanel, startPanel);
+                bottomDisplay.setText(searchExerciseByNameInput.getText() + " was not found");
+            } else {
+                removeAndSet(searchForExercisePanel, displayPanel);
+                display.setText(exercise.toString());
+            }
+            clearInputs(inputs);
+
 
         } else if (e.getActionCommand().equals("Quit")) {
             try {
@@ -394,8 +418,18 @@ public class DisplayHandler implements ActionListener {
         } else if (e.getActionCommand().equals("Remove exercise")) {
             removeAndSet(workoutPanel, removeExercisePanel);
         } else if (e.getActionCommand().equals("Remove this exercise")) {
-            currentWorkout.removeExercise(removeExerciseNameInput.getText());
-            removeAndSet(removeExercisePanel,workoutPanel);
+            ArrayList<JTextArea> inputs = new ArrayList<>();
+            inputs.add(removeExerciseNameInput);
+            Exercise exercise = currentWorkout.searchExercise(removeExerciseNameInput.getText());
+            if (exercise == null) {
+                removeAndSet(removeExercisePanel, workoutPanel);
+                clearInputs(inputs);
+            } else {
+                currentWorkout.removeExercise(exercise);
+                clearInputs(inputs);
+                removeAndSet(removeExercisePanel,workoutPanel);
+            }
+
         } else if (e.getActionCommand().equals("Print workout")) {
             removeAndSet(workoutPanel, workoutDisplayPanel);
             workoutDisplay.setText(currentWorkout.toString());
@@ -405,6 +439,7 @@ public class DisplayHandler implements ActionListener {
             inputs.add(workoutDisplay);
             removeAndSet(workoutDisplayPanel, workoutPanel);
             clearInputs(inputs);
+            clearDisplay2();
         }
 
         frame.validate();
@@ -429,6 +464,15 @@ public class DisplayHandler implements ActionListener {
 
     public void fillInGridLayout() {
 
+    }
+
+    public void clearDisplay() {
+        bottomDisplay.setText("swiggity swoot");
+
+    }
+
+    public void clearDisplay2() {
+        bottomDisplay2.setText("bippity bop");
     }
 
 }
