@@ -2,6 +2,8 @@ package logbook;
 
 // a list of exercises
 
+import Exceptions.InvalidWorkoutException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -13,7 +15,7 @@ public class Workout {
     private ArrayList<Exercise> workout;
 
 
-
+    // REQUIRES: name and date are not empty
     public Workout(String name, String date) {
         this.name = name;
         this.date = date;

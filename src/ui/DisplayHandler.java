@@ -22,7 +22,7 @@ public class DisplayHandler implements ActionListener {
             r, c, addResistanceExercise, addCardioExercise, createWorkout, back, removeWorkoutButton,
             searchExerciseButton, removeExerciseButton, returnToWorkout;
     private JLabel logbookHeader, logbookHeader2, bottomDisplay, name, date, name2, weight, reps, sets,
-    name3, duration, intensity, name4, removeWorkoutName, searchExerciseByName, removeExerciseName;
+    name3, duration, intensity, name4, removeWorkoutName, searchExerciseByName, removeExerciseName, bottomDisplay2;
     private JTextArea inputName, inputDate, inputName2, inputWeight, inputSets, inputReps,
             inputName3, inputDuration, inputIntensity, inputName4, display, removeWorkoutNameInput,
             searchExerciseByNameInput, removeExerciseNameInput, workoutDisplay;
@@ -131,6 +131,10 @@ public class DisplayHandler implements ActionListener {
         optionsPanelInWorkout.add(done);
 
         workoutPanel.add(optionsPanelInWorkout, BorderLayout.CENTER);  // added options panel to workout panel
+        bottomDisplay2 = new JLabel();
+        bottomDisplay2.setBackground(Color.GREEN);
+        bottomDisplay2.setOpaque(true);
+        workoutPanel.add(bottomDisplay2, BorderLayout.SOUTH);
 
 
 
@@ -263,38 +267,6 @@ public class DisplayHandler implements ActionListener {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         frame.setContentPane(startPanel);
         frame.pack();
         frame.setVisible(true);
@@ -310,11 +282,18 @@ public class DisplayHandler implements ActionListener {
             ArrayList<JTextArea> inputs = new ArrayList<>();
             inputs.add(inputName);
             inputs.add(inputDate);
-            Workout workout = new Workout(inputName.getText(), inputDate.getText());
-            logbook.addWorkout(workout);
-            clearInputs(inputs);
-            removeAndSet(nameAndDate, workoutPanel);
-            currentWorkout = workout;
+            if (inputName.getText().equals("") || inputDate.getText().equals("")) {
+                removeAndSet(nameAndDate, startPanel);
+                bottomDisplay.setText("Error: Failed to create workout");
+                clearInputs(inputs);
+            } else {
+                Workout workout = new Workout(inputName.getText(), inputDate.getText());
+                logbook.addWorkout(workout);
+                clearInputs(inputs);
+                removeAndSet(nameAndDate, workoutPanel);
+                currentWorkout = workout;
+            }
+
         } else if (e.getActionCommand().equals("Add exercise")) {
             removeAndSet(workoutPanel, rvcPanel);
 
@@ -330,12 +309,18 @@ public class DisplayHandler implements ActionListener {
             inputs.add(inputReps);
 
             currentWorkout = logbook.getLogbook().get(logbook.getSize()-1);
-            currentWorkout.addExercise(new ResistanceExercise(inputName2.getText(),
-                    Integer.parseInt(inputWeight.getText()), Integer.parseInt(inputSets.getText()),
-                    Integer.parseInt(inputReps.getText())));   // HAVE TO DEAL WITH EXCEPTIONS
+            try {
+                currentWorkout.addExercise(new ResistanceExercise(inputName2.getText(),
+                        Integer.parseInt(inputWeight.getText()), Integer.parseInt(inputSets.getText()),
+                        Integer.parseInt(inputReps.getText())));   // HAVE TO DEAL WITH EXCEPTIONS
+                bottomDisplay2.setText(inputName2.getText() + " was added successfully");
+            } catch(NumberFormatException exception) {
+                bottomDisplay2.setText("Failed to add exercise");
+            } finally {
+                clearInputs(inputs);
+                removeAndSet(resPanel, workoutPanel);
+            }
 
-            clearInputs(inputs);
-            removeAndSet(resPanel, workoutPanel);
         } else if (e.getActionCommand().equals("Add cardio exercise")) {
             ArrayList<JTextArea> inputs = new ArrayList<>();
             inputs.add(inputName3);
@@ -344,11 +329,17 @@ public class DisplayHandler implements ActionListener {
 
 
             currentWorkout = logbook.getLogbook().get(logbook.getSize()-1);
-            currentWorkout.addExercise(new CardioExercise(inputName3.getText(), Integer.parseInt(inputDuration.getText()),
-                    inputIntensity.getText()));           //  HAVE TO DEAL WITH EXCEPTIONS
+            try {
+                currentWorkout.addExercise(new CardioExercise(inputName3.getText(), Integer.parseInt(inputDuration.getText()),
+                        inputIntensity.getText()));           //  HAVE TO DEAL WITH EXCEPTIONS
+                bottomDisplay2.setText(inputName3.getText() + " was added succesfully");
 
-            clearInputs(inputs);
-            removeAndSet(cardioPanel, workoutPanel);
+            } catch(NumberFormatException exception) {
+                bottomDisplay2.setText("Failed to add exercise");
+            } finally {
+                clearInputs(inputs);
+                removeAndSet(cardioPanel, workoutPanel);
+            }
         } else if (e.getActionCommand().equals("Search for workout")) {
             removeAndSet(startPanel, searchPanel);
 
