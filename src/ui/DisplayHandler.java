@@ -226,7 +226,7 @@ public class DisplayHandler implements ActionListener {
         removeWorkoutPanel.setLayout(new GridLayout(2,2));
         removeWorkoutName = new JLabel("Name: ");
         removeWorkoutNameInput = new JTextArea();
-        removeWorkoutButton = new JButton("Remove workout");
+        removeWorkoutButton = new JButton("Remove");
         removeWorkoutButton.addActionListener(this);
         removeWorkoutPanel.add(removeWorkoutName);
         removeWorkoutPanel.add(removeWorkoutNameInput);
@@ -379,10 +379,11 @@ public class DisplayHandler implements ActionListener {
                 removeAndSet(removeWorkoutPanel, startPanel);
             } else {
                 logbook.removeWorkout(workout);
-                clearInputs(inputs);
                 removeAndSet(removeWorkoutPanel, startPanel);
                 bottomDisplay.setText(removeWorkoutNameInput.getText() + " was removed successfully");
             }
+            clearInputs(inputs);
+
 
 
         } else if (e.getActionCommand().equals("Search for exercise")) {
@@ -392,7 +393,7 @@ public class DisplayHandler implements ActionListener {
             Exercise exercise = logbook.searchForExercise(searchExerciseByNameInput.getText());
             ArrayList<JTextArea> inputs = new ArrayList<>();
             inputs.add(searchExerciseByNameInput);
-            inputs.add(display);
+
 
             inputs.add(searchExerciseByNameInput);
             if (exercise == null) {
@@ -424,11 +425,15 @@ public class DisplayHandler implements ActionListener {
             if (exercise == null) {
                 removeAndSet(removeExercisePanel, workoutPanel);
                 clearInputs(inputs);
+                bottomDisplay2.setText("Exercise was not found");
             } else {
                 currentWorkout.removeExercise(exercise);
                 clearInputs(inputs);
                 removeAndSet(removeExercisePanel,workoutPanel);
+                bottomDisplay2.setText("Exercise removed successfully");
             }
+
+            // REMOVED SUCCESSFULLY? bottomdisplay2
 
         } else if (e.getActionCommand().equals("Print workout")) {
             removeAndSet(workoutPanel, workoutDisplayPanel);
